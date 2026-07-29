@@ -10,7 +10,7 @@
     
     <style>
         /* ============================================================
-           ARUZHAN AI — PREMIUM AI CHAT INTERFACE STYLES
+           ARUZHAN AI — PREMIUM STYLES
            ============================================================ */
         :root {
             --bg-main: #08080d;
@@ -30,21 +30,15 @@
             --accent-light: #a78bfa;
             --accent-dark: #6d28d9;
 
-            --blue: #3b82f6;
-            --cyan: #06b6d4;
             --green: #22c55e;
-            --red: #ef4444;
 
             --gradient-primary: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #3b82f6 100%);
             --gradient-ai: linear-gradient(135deg, #a78bfa, #6366f1, #06b6d4);
 
-            --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
             --shadow-accent: 0 0 40px rgba(139, 92, 246, 0.15);
 
-            --radius-sm: 8px;
             --radius-md: 14px;
             --radius-lg: 20px;
-            --radius-xl: 28px;
 
             --sidebar-width: 280px;
             --topbar-height: 72px;
@@ -86,7 +80,6 @@
             color: inherit;
         }
 
-        /* App Layout */
         .app {
             display: flex;
             width: 100%;
@@ -131,7 +124,6 @@
         .brand-info h1 {
             font-size: 16px;
             font-weight: 700;
-            letter-spacing: 0.5px;
         }
 
         .brand-info span {
@@ -235,7 +227,7 @@
             color: var(--text-muted);
         }
 
-        /* Main Content Area */
+        /* Main Section */
         .main {
             flex: 1;
             display: flex;
@@ -311,7 +303,7 @@
             color: var(--text-secondary);
         }
 
-        /* Chat Messages Wrapper */
+        /* Chat Area */
         .chat-wrapper {
             flex: 1;
             overflow-y: auto;
@@ -329,11 +321,12 @@
 
         .msg {
             max-width: 80%;
-            padding: 12px 18px;
+            padding: 14px 18px;
             border-radius: var(--radius-md);
             font-size: 14px;
-            line-height: 1.5;
+            line-height: 1.6;
             word-break: break-word;
+            white-space: pre-wrap;
         }
 
         .msg-user {
@@ -349,6 +342,15 @@
             border: 1px solid var(--border);
             color: var(--text-primary);
             border-bottom-left-radius: 4px;
+        }
+
+        .thank-you-card {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(6, 182, 212, 0.15));
+            border: 1px solid var(--accent-light);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            margin-top: 10px;
+            font-style: italic;
         }
 
         /* Input Area */
@@ -420,7 +422,6 @@
             display: none;
         }
 
-        /* Responsive UI */
         @media (max-width: 768px) {
             .sidebar {
                 position: fixed;
@@ -538,9 +539,15 @@
                 </div>
             </header>
 
-            <section class="chat-wrapper">
+            <section class="chat-wrapper" id="chatWrapper">
                 <div class="chat-messages" id="chatMessages">
-                    <div class="msg msg-ai">Сәлем! Мен ARUZHAN AI көмекшісімін. Бүгін сізге қалай көмектесе аламын?</div>
+                    <div class="msg msg-ai">
+Сәлем! Мен **ARUZHAN AI** интеллектуалды көмекшісімін. Сұрағыңызды немесе тапсырмаңызды жазыңыз, мен қуана көмектесемін! ✨
+                        <div class="thank-you-card">
+                            💌 <strong>Құрметті қолданушы!</strong><br>
+                            Біздің ARUZHAN AI жүйесін таңдағаныңыз үшін алғыс білдіреміз! Сізге сапалы әрі жылдам көмек көрсету — біздің басты мақсатымыз.
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -568,7 +575,10 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
+        let currentMode = "companion";
+
         function selectMode(mode) {
+            currentMode = mode;
             document.querySelectorAll(".mode-button").forEach(b => b.classList.remove("active"));
             const btn = document.querySelector(`[data-mode="${mode}"]`);
             if (btn) btn.classList.add("active");
@@ -601,31 +611,51 @@
             if (!text) return;
 
             const chat = document.getElementById("chatMessages");
+            const wrapper = document.getElementById("chatWrapper");
 
-            // Пайдаланушы хабарламасы
+            // Пайдаланушы хабарламасын шығару
             const userMsg = document.createElement("div");
             userMsg.className = "msg msg-user";
             userMsg.textContent = text;
             chat.appendChild(userMsg);
 
             input.value = "";
-            chat.scrollTop = chat.scrollHeight;
+            wrapper.scrollTop = wrapper.scrollHeight;
 
-            // AI жауабының авто-симуляциясы
+            // Сұраққа сәйкес ақылды AI жауаб дайындау
             setTimeout(() => {
                 const aiMsg = document.createElement("div");
                 aiMsg.className = "msg msg-ai";
-                aiMsg.textContent = `ARUZHAN AI ("${text}" сұранысыңыз қабылданды).`;
+                
+                let responseText = "";
+                const lowerText = text.toLowerCase();
+
+                if (lowerText.includes("рахмет") || lowerText.includes("сау бол")) {
+                    responseText = "Оқасы жоқ! Әрқашан көмектесуге дайынмын. Сәттілік тілеймін! ✨";
+                } else if (lowerText.includes("сәлем") || lowerText.includes("салам")) {
+                    responseText = "Сәлем! Көңіл-күйіңіз қалай? Бүгін қандай тақырыпта сөйлесеміз немесе не көмек керек?";
+                } else {
+                    responseText = `[${currentMode.toUpperCase()} режимі]: Сұранысыңыз түсінікті!\n\n"${text}" бойынша барлық қажетті ақпарат пен шешімдерді әзірлеп жатырмын. Тағы қосымша сұрақтарыңыз болса жаза беріңіз!`;
+                }
+
+                aiMsg.innerText = responseText;
                 chat.appendChild(aiMsg);
-                chat.scrollTop = chat.scrollHeight;
+                wrapper.scrollTop = wrapper.scrollHeight;
             }, 600);
         }
 
-        // Enter пернесін басу оқиғасы
+        // Enter басқанда жіберу
         document.getElementById("messageInput").addEventListener("keydown", function(e) {
             if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
                 sendMessage();
+            }
+        });
+
+        // Файл таңдау
+        document.getElementById("fileInput").addEventListener("change", function() {
+            if (this.files && this.files[0]) {
+                alert("Файл жүктелді: " + this.files[0].name);
             }
         });
     </script>
