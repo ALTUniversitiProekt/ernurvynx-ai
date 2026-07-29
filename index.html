@@ -1,663 +1,1892 @@
 <!DOCTYPE html>
 <html lang="kk">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ARUZHAN AI — заманауи жасанды интеллект көмекшісі">
-    <meta name="theme-color" content="#09090f">
-    <title>ARUZHAN AI</title>
-    
-    <style>
-        /* ============================================================
-           ARUZHAN AI — PREMIUM STYLES
-           ============================================================ */
-        :root {
-            --bg-main: #08080d;
-            --bg-secondary: #0d0d14;
-            --bg-sidebar: #0a0a10;
-            --bg-card: #11111a;
-            --bg-card-hover: #171722;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#08080d">
+<title>ARUZHAN AI</title>
 
-            --border: rgba(255, 255, 255, 0.08);
-            --border-light: rgba(255, 255, 255, 0.12);
+<style>
+/* =========================================================
+   ARUZHAN AI — SINGLE FILE AI ASSISTANT
+   HTML + CSS + JAVASCRIPT
+   ========================================================= */
 
-            --text-primary: #f5f5f7;
-            --text-secondary: #a4a4b2;
-            --text-muted: #686875;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-            --accent: #8b5cf6;
-            --accent-light: #a78bfa;
-            --accent-dark: #6d28d9;
+:root{
+    --bg:#07070b;
+    --panel:#0d0d14;
+    --panel2:#12121b;
+    --panel3:#181824;
+    --border:rgba(255,255,255,.08);
+    --text:#f5f5f7;
+    --muted:#92929f;
+    --purple:#8b5cf6;
+    --purple2:#6d28d9;
+    --blue:#3b82f6;
+    --green:#22c55e;
+    --red:#ef4444;
+    --gradient:linear-gradient(135deg,#8b5cf6,#6366f1,#3b82f6);
+}
 
-            --green: #22c55e;
+html,body{
+    width:100%;
+    height:100%;
+}
 
-            --gradient-primary: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #3b82f6 100%);
-            --gradient-ai: linear-gradient(135deg, #a78bfa, #6366f1, #06b6d4);
+body{
+    overflow:hidden;
+    background:var(--bg);
+    color:var(--text);
+    font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+}
 
-            --shadow-accent: 0 0 40px rgba(139, 92, 246, 0.15);
+/* =========================================================
+   APP
+   ========================================================= */
 
-            --radius-md: 14px;
-            --radius-lg: 20px;
+.app{
+    width:100%;
+    height:100vh;
+    display:flex;
+    overflow:hidden;
+    position:relative;
+    background:
+    radial-gradient(circle at 20% 0%,rgba(99,102,241,.1),transparent 30%),
+    radial-gradient(circle at 100% 100%,rgba(139,92,246,.08),transparent 30%),
+    var(--bg);
+}
 
-            --sidebar-width: 280px;
-            --topbar-height: 72px;
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
 
-            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+.sidebar{
+    width:280px;
+    height:100vh;
+    flex-shrink:0;
+    padding:22px 16px;
+    display:flex;
+    flex-direction:column;
+    background:rgba(10,10,16,.96);
+    border-right:1px solid var(--border);
+    z-index:100;
+    transition:.3s ease;
+}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:4px 8px 25px;
+}
 
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
+.logo-icon{
+    width:46px;
+    height:46px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:14px;
+    background:var(--gradient);
+    font-size:12px;
+    font-weight:900;
+    box-shadow:0 10px 30px rgba(99,102,241,.3);
+}
 
-        body {
-            background: 
-                radial-gradient(circle at 20% 10%, rgba(99, 102, 241, 0.08), transparent 30%),
-                radial-gradient(circle at 90% 90%, rgba(139, 92, 246, 0.07), transparent 30%),
-                var(--bg-main);
-            color: var(--text-primary);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
+.logo-text h1{
+    font-size:15px;
+    letter-spacing:.5px;
+}
 
-        button, textarea, input {
-            font-family: inherit;
-        }
+.logo-text span{
+    color:var(--muted);
+    font-size:10px;
+}
 
-        button {
-            border: none;
-            outline: none;
-            cursor: pointer;
-            background: transparent;
-            color: inherit;
-        }
+.new-chat{
+    width:100%;
+    height:46px;
+    border:1px solid rgba(139,92,246,.3);
+    border-radius:12px;
+    background:rgba(139,92,246,.08);
+    color:white;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:25px;
+    transition:.25s;
+}
 
-        .app {
-            display: flex;
-            width: 100%;
-            height: 100vh;
-            position: relative;
-        }
+.new-chat:hover{
+    background:rgba(139,92,246,.18);
+    transform:translateY(-1px);
+}
 
-        /* Sidebar */
-        .sidebar {
-            width: var(--sidebar-width);
-            height: 100vh;
-            flex-shrink: 0;
-            display: flex;
-            flex-direction: column;
-            padding: 22px 16px 16px;
-            background: linear-gradient(180deg, rgba(14, 14, 23, 0.98), rgba(8, 8, 13, 0.98));
-            border-right: 1px solid var(--border);
-            z-index: 100;
-            transition: transform var(--transition);
-        }
+.section-title{
+    color:#666674;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:1.5px;
+    padding:0 10px 10px;
+}
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 4px 8px 24px;
-        }
+.modes{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
 
-        .brand-logo {
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: var(--radius-md);
-            background: var(--gradient-primary);
-            color: white;
-            font-weight: 800;
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
-        }
+.mode{
+    width:100%;
+    padding:11px 10px;
+    border:1px solid transparent;
+    border-radius:12px;
+    background:transparent;
+    color:var(--muted);
+    display:flex;
+    align-items:center;
+    gap:12px;
+    text-align:left;
+    cursor:pointer;
+    transition:.25s;
+}
 
-        .brand-info h1 {
-            font-size: 16px;
-            font-weight: 700;
-        }
+.mode:hover{
+    background:rgba(255,255,255,.04);
+    color:white;
+}
 
-        .brand-info span {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
+.mode.active{
+    background:rgba(139,92,246,.13);
+    border-color:rgba(139,92,246,.2);
+    color:white;
+}
 
-        .new-chat-button {
-            width: 100%;
-            padding: 12px;
-            border-radius: var(--radius-md);
-            background: var(--gradient-primary);
-            color: white;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: var(--transition);
-        }
+.mode-icon{
+    width:34px;
+    height:34px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:10px;
+    background:rgba(255,255,255,.05);
+}
 
-        .new-chat-button:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
-        }
+.mode-info{
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+}
 
-        .sidebar-section {
-            margin-top: 24px;
-            flex: 1;
-            overflow-y: auto;
-        }
+.mode-info strong{
+    font-size:12px;
+}
 
-        .sidebar-title {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--text-muted);
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-            padding-left: 8px;
-        }
+.mode-info small{
+    color:#666674;
+    font-size:10px;
+}
 
-        .mode-list {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
+.sidebar-bottom{
+    margin-top:auto;
+}
 
-        .mode-button {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 12px;
-            border-radius: var(--radius-md);
-            transition: var(--transition);
-            text-align: left;
-            width: 100%;
-        }
+.status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:11px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    color:var(--muted);
+    font-size:11px;
+    margin-bottom:15px;
+}
 
-        .mode-button:hover {
-            background: var(--bg-card);
-        }
+.status-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 10px rgba(34,197,94,.8);
+}
 
-        .mode-button.active {
-            background: var(--bg-card-hover);
-            border: 1px solid var(--border-light);
-        }
+.sidebar-footer{
+    border-top:1px solid var(--border);
+    padding-top:13px;
+    display:flex;
+    justify-content:space-between;
+    color:#555560;
+    font-size:10px;
+}
 
-        .mode-text strong {
-            display: block;
-            font-size: 13px;
-        }
+/* =========================================================
+   MAIN
+   ========================================================= */
 
-        .mode-text small {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
+.main{
+    flex:1;
+    min-width:0;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+}
 
-        .sidebar-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 8px;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
+/* =========================================================
+   HEADER
+   ========================================================= */
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--green);
-            box-shadow: 0 0 10px var(--green);
-        }
+.header{
+    height:72px;
+    flex-shrink:0;
+    padding:0 28px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid var(--border);
+    background:rgba(7,7,11,.8);
+    backdrop-filter:blur(20px);
+}
 
-        .sidebar-footer {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 8px 0;
-            border-top: 1px solid var(--border);
-            font-size: 11px;
-            color: var(--text-muted);
-        }
+.header-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
 
-        /* Main Section */
-        .main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            background: var(--bg-secondary);
-        }
+.mobile-menu{
+    display:none;
+    width:38px;
+    height:38px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:transparent;
+    color:white;
+    cursor:pointer;
+}
 
-        .topbar {
-            height: var(--topbar-height);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 24px;
-            border-bottom: 1px solid var(--border);
-        }
+.ai-avatar{
+    width:40px;
+    height:40px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:12px;
+    background:var(--gradient);
+    font-size:10px;
+    font-weight:900;
+}
 
-        .topbar-left, .topbar-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
+.header-info h2{
+    font-size:14px;
+}
 
-        .ai-header-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+.online{
+    margin-top:3px;
+    display:flex;
+    align-items:center;
+    gap:5px;
+    color:#777783;
+    font-size:10px;
+}
 
-        .ai-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: var(--gradient-ai);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 12px;
-        }
+.online i{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:var(--green);
+}
 
-        .ai-header-info h2 {
-            font-size: 14px;
-            font-weight: 600;
-        }
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
 
-        .online-status {
-            font-size: 11px;
-            color: var(--green);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
+.current-mode{
+    padding:7px 12px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    color:var(--muted);
+    font-size:11px;
+}
 
-        .online-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--green);
-        }
+.clear-btn{
+    width:38px;
+    height:38px;
+    border:1px solid transparent;
+    border-radius:10px;
+    background:transparent;
+    color:var(--muted);
+    cursor:pointer;
+    font-size:16px;
+}
 
-        .mobile-menu-button {
-            display: none;
-            font-size: 20px;
-        }
+.clear-btn:hover{
+    background:rgba(255,255,255,.05);
+    border-color:var(--border);
+    color:white;
+}
 
-        .current-mode {
-            font-size: 12px;
-            padding: 6px 12px;
-            border-radius: 20px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-        }
+/* =========================================================
+   CHAT
+   ========================================================= */
 
-        /* Chat Area */
-        .chat-wrapper {
-            flex: 1;
-            overflow-y: auto;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
+.chat{
+    flex:1;
+    min-height:0;
+    overflow-y:auto;
+    padding:35px max(20px,calc((100vw - 1050px)/2)) 160px;
+}
 
-        .chat-messages {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+.chat::-webkit-scrollbar{
+    width:7px;
+}
 
-        .msg {
-            max-width: 80%;
-            padding: 14px 18px;
-            border-radius: var(--radius-md);
-            font-size: 14px;
-            line-height: 1.6;
-            word-break: break-word;
-            white-space: pre-wrap;
-        }
+.chat::-webkit-scrollbar-thumb{
+    background:rgba(255,255,255,.1);
+    border-radius:20px;
+}
 
-        .msg-user {
-            align-self: flex-end;
-            background: var(--gradient-primary);
-            color: white;
-            border-bottom-right-radius: 4px;
-        }
+/* =========================================================
+   WELCOME
+   ========================================================= */
 
-        .msg-ai {
-            align-self: flex-start;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            border-bottom-left-radius: 4px;
-        }
+.welcome{
+    max-width:850px;
+    margin:60px auto 45px;
+    text-align:center;
+    animation:fadeUp .5s ease;
+}
 
-        .thank-you-card {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(6, 182, 212, 0.15));
-            border: 1px solid var(--accent-light);
-            border-radius: var(--radius-lg);
-            padding: 16px;
-            margin-top: 10px;
-            font-style: italic;
-        }
+.welcome-logo{
+    width:70px;
+    height:70px;
+    margin:0 auto 20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:22px;
+    background:var(--gradient);
+    font-weight:900;
+    font-size:17px;
+    box-shadow:0 15px 45px rgba(99,102,241,.25);
+}
 
-        /* Input Area */
-        .input-area {
-            padding: 16px 24px 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+.welcome h1{
+    font-size:32px;
+    margin-bottom:10px;
+}
 
-        .input-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 10px 16px;
-            transition: var(--transition);
-        }
+.welcome p{
+    color:var(--muted);
+    font-size:14px;
+}
 
-        .input-container:focus-within {
-            border-color: var(--accent);
-            box-shadow: var(--shadow-accent);
-        }
+.quick-actions{
+    margin-top:30px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
 
-        .message-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: white;
-            resize: none;
-            max-height: 120px;
-            outline: none;
-            font-size: 14px;
-        }
+.quick{
+    padding:15px;
+    text-align:left;
+    border:1px solid var(--border);
+    border-radius:14px;
+    background:rgba(255,255,255,.025);
+    color:var(--text);
+    cursor:pointer;
+    transition:.25s;
+}
 
-        .send-button {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: var(--accent);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-        }
+.quick:hover{
+    background:rgba(139,92,246,.08);
+    border-color:rgba(139,92,246,.3);
+    transform:translateY(-2px);
+}
 
-        .send-button:hover {
-            background: var(--accent-dark);
-            transform: scale(1.05);
-        }
+.quick strong{
+    display:block;
+    font-size:12px;
+    margin-bottom:5px;
+}
 
-        .input-hint, .ai-disclaimer {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            font-size: 11px;
-            color: var(--text-muted);
-        }
+.quick span{
+    color:var(--muted);
+    font-size:10px;
+}
 
-        .sidebar-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
-            z-index: 90;
-            display: none;
-        }
+/* =========================================================
+   MESSAGE
+   ========================================================= */
 
-        @media (max-width: 768px) {
-            .sidebar {
-                position: fixed;
-                left: 0;
-                top: 0;
-                transform: translateX(-100%);
+.message{
+    max-width:850px;
+    margin:0 auto 25px;
+    display:flex;
+    gap:12px;
+    animation:messageIn .3s ease;
+}
+
+.message.user{
+    flex-direction:row-reverse;
+}
+
+.avatar{
+    width:34px;
+    height:34px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:10px;
+    font-size:9px;
+    font-weight:900;
+}
+
+.message.ai .avatar{
+    background:var(--gradient);
+}
+
+.message.user .avatar{
+    background:rgba(255,255,255,.08);
+    border:1px solid var(--border);
+}
+
+.message-body{
+    max-width:calc(100% - 50px);
+}
+
+.message-text{
+    font-size:14px;
+    line-height:1.75;
+    overflow-wrap:anywhere;
+}
+
+.message.user .message-text{
+    background:rgba(139,92,246,.12);
+    border:1px solid rgba(139,92,246,.16);
+    border-radius:5px 16px 16px 16px;
+    padding:10px 15px;
+}
+
+.message.user .message-body{
+    text-align:right;
+}
+
+.message-time{
+    margin-top:5px;
+    color:#555560;
+    font-size:9px;
+}
+
+/* =========================================================
+   CODE
+   ========================================================= */
+
+.code-block{
+    margin:14px 0;
+    padding:16px;
+    background:#050508;
+    border:1px solid var(--border);
+    border-radius:12px;
+    overflow-x:auto;
+    color:#ddd;
+    font-family:Consolas,monospace;
+    font-size:12px;
+    line-height:1.7;
+    text-align:left;
+}
+
+.inline-code{
+    background:rgba(255,255,255,.08);
+    color:#a78bfa;
+    padding:2px 6px;
+    border-radius:5px;
+    font-family:Consolas,monospace;
+}
+
+/* =========================================================
+   TYPING
+   ========================================================= */
+
+.typing{
+    max-width:850px;
+    margin:0 auto 20px;
+    display:none;
+    align-items:center;
+    gap:10px;
+}
+
+.typing.show{
+    display:flex;
+}
+
+.typing-avatar{
+    width:34px;
+    height:34px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:10px;
+    background:var(--gradient);
+    font-size:9px;
+    font-weight:900;
+}
+
+.dots{
+    display:flex;
+    gap:4px;
+}
+
+.dots span{
+    width:5px;
+    height:5px;
+    border-radius:50%;
+    background:#a78bfa;
+    animation:bounce 1s infinite;
+}
+
+.dots span:nth-child(2){
+    animation-delay:.15s;
+}
+
+.dots span:nth-child(3){
+    animation-delay:.3s;
+}
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+.input-area{
+    position:relative;
+    padding:15px max(20px,calc((100vw - 1050px)/2)) 20px;
+    background:linear-gradient(to top,var(--bg) 70%,transparent);
+}
+
+.input-box{
+    max-width:850px;
+    min-height:58px;
+    margin:auto;
+    display:flex;
+    align-items:flex-end;
+    gap:8px;
+    padding:8px;
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:17px;
+    background:rgba(18,18,27,.96);
+    transition:.25s;
+}
+
+.input-box:focus-within{
+    border-color:rgba(139,92,246,.5);
+    box-shadow:0 0 0 3px rgba(139,92,246,.06);
+}
+
+textarea{
+    flex:1;
+    min-width:0;
+    min-height:40px;
+    max-height:180px;
+    resize:none;
+    border:none;
+    outline:none;
+    background:transparent;
+    color:white;
+    padding:10px 5px;
+    font-size:14px;
+    line-height:20px;
+}
+
+textarea::placeholder{
+    color:#5f5f6b;
+}
+
+.send{
+    width:42px;
+    height:42px;
+    border:none;
+    border-radius:11px;
+    background:var(--gradient);
+    color:white;
+    cursor:pointer;
+    font-size:17px;
+    transition:.25s;
+}
+
+.send:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 25px rgba(99,102,241,.35);
+}
+
+.send:disabled{
+    opacity:.4;
+    cursor:not-allowed;
+    transform:none;
+}
+
+.hint{
+    text-align:center;
+    margin-top:8px;
+    color:#454550;
+    font-size:9px;
+}
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(15px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes messageIn{
+    from{
+        opacity:0;
+        transform:translateY(8px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes bounce{
+    0%,100%{
+        transform:translateY(0);
+        opacity:.4;
+    }
+    50%{
+        transform:translateY(-5px);
+        opacity:1;
+    }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:768px){
+
+    .sidebar{
+        position:fixed;
+        left:0;
+        top:0;
+        transform:translateX(-100%);
+        box-shadow:20px 0 60px rgba(0,0,0,.5);
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .mobile-menu{
+        display:block;
+    }
+
+    .header{
+        height:64px;
+        padding:0 14px;
+    }
+
+    .current-mode{
+        display:none;
+    }
+
+    .chat{
+        padding:25px 12px 140px;
+    }
+
+    .welcome{
+        margin:40px auto;
+    }
+
+    .welcome h1{
+        font-size:25px;
+    }
+
+    .quick-actions{
+        grid-template-columns:1fr;
+    }
+
+    .message-text{
+        font-size:13px;
+    }
+
+    .input-area{
+        padding:10px 10px 14px;
+    }
+
+    .hint{
+        display:none;
+    }
+}
+
+@media(max-width:450px){
+
+    .logo-text h1{
+        font-size:14px;
+    }
+
+    .header-info h2{
+        font-size:12px;
+    }
+
+    .welcome-logo{
+        width:60px;
+        height:60px;
+    }
+
+    .welcome h1{
+        font-size:23px;
+    }
+
+    .message{
+        gap:8px;
+    }
+
+    .avatar{
+        width:30px;
+        height:30px;
+    }
+
+    .message-text{
+        font-size:12.5px;
+    }
+
+}
+</style>
+</head>
+
+
+<body>
+
+<div class="app">
+
+<!-- ======================================================
+     SIDEBAR
+======================================================= -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+        <div class="logo-icon">AI</div>
+
+        <div class="logo-text">
+            <h1>ARUZHAN AI</h1>
+            <span>Intelligent Assistant</span>
+        </div>
+    </div>
+
+    <button class="new-chat" onclick="newChat()">
+        ＋ Жаңа чат
+    </button>
+
+    <div class="section-title">
+        AI MODE
+    </div>
+
+    <div class="modes">
+
+        <button class="mode active" onclick="setMode('companion',this)">
+            <div class="mode-icon">🤍</div>
+            <div class="mode-info">
+                <strong>Companion</strong>
+                <small>Natural conversation</small>
+            </div>
+        </button>
+
+        <button class="mode" onclick="setMode('smart',this)">
+            <div class="mode-icon">🧠</div>
+            <div class="mode-info">
+                <strong>Smart AI</strong>
+                <small>Universal assistant</small>
+            </div>
+        </button>
+
+        <button class="mode" onclick="setMode('study',this)">
+            <div class="mode-icon">📚</div>
+            <div class="mode-info">
+                <strong>Study</strong>
+                <small>Learn and understand</small>
+            </div>
+        </button>
+
+        <button class="mode" onclick="setMode('developer',this)">
+            <div class="mode-icon">💻</div>
+            <div class="mode-info">
+                <strong>Developer</strong>
+                <small>Code and technology</small>
+            </div>
+        </button>
+
+        <button class="mode" onclick="setMode('motivation',this)">
+            <div class="mode-icon">🚀</div>
+            <div class="mode-info">
+                <strong>Motivation</strong>
+                <small>Goals and productivity</small>
+            </div>
+        </button>
+
+    </div>
+
+    <div class="sidebar-bottom">
+
+        <div class="status">
+            <span class="status-dot"></span>
+            <span>AI Ready</span>
+        </div>
+
+        <div class="sidebar-footer">
+            <span>ARUZHAN AI</span>
+            <span>v1.0</span>
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- ======================================================
+     MAIN
+======================================================= -->
+
+<main class="main">
+
+<header class="header">
+
+    <div class="header-left">
+
+        <button
+            class="mobile-menu"
+            onclick="toggleSidebar()">
+            ☰
+        </button>
+
+        <div class="ai-avatar">
+            AI
+        </div>
+
+        <div class="header-info">
+            <h2>ARUZHAN AI</h2>
+
+            <div class="online">
+                <i></i>
+                Online
+            </div>
+        </div>
+
+    </div>
+
+    <div class="header-right">
+
+        <div class="current-mode" id="modeLabel">
+            Companion
+        </div>
+
+        <button
+            class="clear-btn"
+            onclick="clearChat()">
+            🗑
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- ======================================================
+     CHAT
+======================================================= -->
+
+<div class="chat" id="chat">
+
+    <div class="welcome" id="welcome">
+
+        <div class="welcome-logo">
+            AI
+        </div>
+
+        <h1>Сәлем! Мен ARUZHAN AI</h1>
+
+        <p>
+            Сұрағыңды жаз. Мен саған мүмкіндігінше көмектесуге тырысамын.
+        </p>
+
+        <div class="quick-actions">
+
+            <button class="quick"
+                onclick="quickAsk('Маған HTML үйретші')">
+                <strong>💻 Код жазу</strong>
+                <span>HTML, CSS, JavaScript және бағдарламалау</span>
+            </button>
+
+            <button class="quick"
+                onclick="quickAsk('Маған сабақ оқуға көмектесші')">
+                <strong>📚 Оқу</strong>
+                <span>Күрделі тақырыптарды түсіндіріп беру</span>
+            </button>
+
+            <button class="quick"
+                onclick="quickAsk('Маған бүгінгі күнге жоспар құрып берші')">
+                <strong>🚀 Жоспар</strong>
+                <span>Күнделікті мақсаттар мен жоспарлау</span>
+            </button>
+
+            <button class="quick"
+                onclick="quickAsk('Маған қызықты бір нәрсе айтып берші')">
+                <strong>🧠 Білім</strong>
+                <span>Қызықты ақпарат және сұрақтарға жауап</span>
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div id="messages"></div>
+
+
+    <div class="typing" id="typing">
+
+        <div class="typing-avatar">
+            AI
+        </div>
+
+        <div>
+            ARUZHAN AI ойлануда
+        </div>
+
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     INPUT
+======================================================= -->
+
+<div class="input-area">
+
+    <div class="input-box">
+
+        <textarea
+            id="input"
+            rows="1"
+            placeholder="ARUZHAN AI-ға сұрағыңды жаз..."
+            onkeydown="handleKey(event)"
+            oninput="resizeInput(this)">
+        </textarea>
+
+        <button
+            class="send"
+            id="send"
+            onclick="sendMessage()">
+            ➤
+        </button>
+
+    </div>
+
+    <div class="hint">
+        Enter — жіберу · Shift + Enter — жаңа жол
+    </div>
+
+</div>
+
+</main>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   ARUZHAN AI — JAVASCRIPT ENGINE
+   ========================================================= */
+
+let currentMode = "companion";
+
+let messages = [];
+
+let isThinking = false;
+
+
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
+
+const input =
+    document.getElementById("input");
+
+const messagesBox =
+    document.getElementById("messages");
+
+const typing =
+    document.getElementById("typing");
+
+const welcome =
+    document.getElementById("welcome");
+
+const sendButton =
+    document.getElementById("send");
+
+
+/* =========================================================
+   MODE
+   ========================================================= */
+
+function setMode(mode,button){
+
+    currentMode = mode;
+
+    document
+        .querySelectorAll(".mode")
+        .forEach(item =>
+            item.classList.remove("active")
+        );
+
+    button.classList.add("active");
+
+    const names = {
+        companion:"Companion",
+        smart:"Smart AI",
+        study:"Study",
+        developer:"Developer",
+        motivation:"Motivation"
+    };
+
+    document.getElementById("modeLabel")
+        .textContent =
+        names[mode];
+
+}
+
+
+/* =========================================================
+   SEND
+   ========================================================= */
+
+function sendMessage(){
+
+    if(isThinking) return;
+
+    const text =
+        input.value.trim();
+
+    if(!text) return;
+
+    addMessage(
+        text,
+        "user"
+    );
+
+    input.value = "";
+
+    resizeInput(input);
+
+    showThinking();
+
+    setTimeout(() => {
+
+        const answer =
+            generateAIResponse(text);
+
+        hideThinking();
+
+        addMessage(
+            answer,
+            "ai"
+        );
+
+    },700);
+
+}
+
+
+/* =========================================================
+   QUICK QUESTION
+   ========================================================= */
+
+function quickAsk(text){
+
+    input.value = text;
+
+    sendMessage();
+
+}
+
+
+/* =========================================================
+   KEYBOARD
+   ========================================================= */
+
+function handleKey(event){
+
+    if(
+        event.key === "Enter" &&
+        !event.shiftKey
+    ){
+
+        event.preventDefault();
+
+        sendMessage();
+
+    }
+
+}
+
+
+/* =========================================================
+   RESIZE INPUT
+   ========================================================= */
+
+function resizeInput(element){
+
+    element.style.height = "auto";
+
+    element.style.height =
+        Math.min(
+            element.scrollHeight,
+            180
+        ) + "px";
+
+}
+
+
+/* =========================================================
+   ADD MESSAGE
+   ========================================================= */
+
+function addMessage(text,type){
+
+    welcome.style.display = "none";
+
+    const wrapper =
+        document.createElement("div");
+
+    wrapper.className =
+        "message " + type;
+
+    const avatar =
+        document.createElement("div");
+
+    avatar.className = "avatar";
+
+    avatar.textContent =
+        type === "ai"
+        ? "AI"
+        : "YOU";
+
+    const body =
+        document.createElement("div");
+
+    body.className =
+        "message-body";
+
+    const content =
+        document.createElement("div");
+
+    content.className =
+        "message-text";
+
+    if(type === "ai"){
+
+        content.innerHTML =
+            formatResponse(text);
+
+    }else{
+
+        content.textContent =
+            text;
+
+    }
+
+    const time =
+        document.createElement("div");
+
+    time.className =
+        "message-time";
+
+    time.textContent =
+        new Date()
+        .toLocaleTimeString(
+            "kk-KZ",
+            {
+                hour:"2-digit",
+                minute:"2-digit"
             }
+        );
 
-            .sidebar.open {
-                transform: translateX(0);
-            }
+    body.appendChild(content);
 
-            .sidebar-overlay.active {
-                display: block;
-            }
+    body.appendChild(time);
 
-            .mobile-menu-button {
-                display: block;
-            }
-        }
-    </style>
+    wrapper.appendChild(avatar);
+
+    wrapper.appendChild(body);
+
+    messagesBox.appendChild(wrapper);
+
+    messagesBox.scrollIntoView({
+        behavior:"smooth",
+        block:"end"
+    });
+
+    const chat =
+        document.getElementById("chat");
+
+    chat.scrollTo({
+        top:chat.scrollHeight,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================================================
+   FORMAT RESPONSE
+   ========================================================= */
+
+function formatResponse(text){
+
+    let result =
+        escapeHTML(text);
+
+    result =
+        result.replace(
+            /```([\s\S]*?)```/g,
+            '<pre class="code-block">$1</pre>'
+        );
+
+    result =
+        result.replace(
+            /`([^`]+)`/g,
+            '<span class="inline-code">$1</span>'
+        );
+
+    result =
+        result.replace(
+            /\*\*(.*?)\*\*/g,
+            "<strong>$1</strong>"
+        );
+
+    result =
+        result.replace(
+            /\n/g,
+            "<br>"
+        );
+
+    return result;
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+   ========================================================= */
+
+function escapeHTML(text){
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        text;
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================================
+   THINKING
+   ========================================================= */
+
+function showThinking(){
+
+    isThinking = true;
+
+    typing.classList.add("show");
+
+    sendButton.disabled = true;
+
+    const chat =
+        document.getElementById("chat");
+
+    setTimeout(() => {
+
+        chat.scrollTo({
+            top:chat.scrollHeight,
+            behavior:"smooth"
+        });
+
+    },50);
+
+}
+
+
+function hideThinking(){
+
+    isThinking = false;
+
+    typing.classList.remove("show");
+
+    sendButton.disabled = false;
+
+}
+
+
+/* =========================================================
+   AI RESPONSE ENGINE
+   ========================================================= */
+
+function generateAIResponse(question){
+
+    const q =
+        question.toLowerCase().trim();
+
+
+    /* GREETING */
+
+    if(
+        q.includes("сәлем") ||
+        q.includes("салам") ||
+        q.includes("hello") ||
+        q.includes("hi") ||
+        q.includes("привет")
+    ){
+
+        return `
+Сәлем! 👋 Мен ARUZHAN AI.
+
+Мен саған оқу, бағдарламалау, сайт жасау, идея ойлап табу, жоспар құру және күнделікті сұрақтар бойынша көмектесе аламын.
+
+Не туралы сөйлесеміз?
+`;
+
+    }
+
+
+    /* WHO ARE YOU */
+
+    if(
+        q.includes("сен кімсің") ||
+        q.includes("атың кім") ||
+        q.includes("кто ты")
+    ){
+
+        return `
+Менің атым — ARUZHAN AI 🤖
+
+Мен заманауи AI көмекші ретінде жасалғанмын. Менің мақсатым — сұрақтарыңа түсінікті жауап беру және тапсырмаларыңды орындауға көмектесу.
+`;
+
+    }
+
+
+    /* THANK YOU */
+
+    if(
+        q.includes("рахмет") ||
+        q.includes("спасибо") ||
+        q.includes("thanks")
+    ){
+
+        return `
+Әрқашан көмектесуге дайынмын! 😊
+`;
+
+    }
+
+
+    /* HTML */
+
+    if(
+        q.includes("html")
+    ){
+
+        return `
+HTML — веб-беттің құрылымын жасайтын белгілеу тілі.
+
+Мысалы:
+
+\`\`\`html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Менің сайтым</title>
 </head>
 
 <body>
-    <div class="app">
-        <!-- SIDEBAR -->
-        <aside class="sidebar" id="sidebar">
-            <div class="brand">
-                <div class="brand-logo">AI</div>
-                <div class="brand-info">
-                    <h1>ARUZHAN AI</h1>
-                    <span>Intelligent Assistant</span>
-                </div>
-            </div>
 
-            <button class="new-chat-button" type="button" onclick="clearChat()">
-                <span>+</span> Жаңа чат
-            </button>
+    <h1>Сәлем әлем!</h1>
 
-            <div class="sidebar-section">
-                <div class="sidebar-title">AI MODE</div>
-                <div class="mode-list">
-                    <button class="mode-button active" type="button" data-mode="companion" onclick="selectMode('companion')">
-                        <span class="mode-icon">🤍</span>
-                        <span class="mode-text">
-                            <strong>Companion</strong>
-                            <small>Natural conversation</small>
-                        </span>
-                    </button>
+    <p>Бұл менің алғашқы сайтым.</p>
 
-                    <button class="mode-button" type="button" data-mode="smart" onclick="selectMode('smart')">
-                        <span class="mode-icon">🧠</span>
-                        <span class="mode-text">
-                            <strong>Smart AI</strong>
-                            <small>Universal assistant</small>
-                        </span>
-                    </button>
+</body>
+</html>
+\`\`\`
 
-                    <button class="mode-button" type="button" data-mode="study" onclick="selectMode('study')">
-                        <span class="mode-icon">📚</span>
-                        <span class="mode-text">
-                            <strong>Study</strong>
-                            <small>Learn and understand</small>
-                        </span>
-                    </button>
+HTML — құрылым.
+CSS — дизайн.
+JavaScript — әрекет пен логика.
 
-                    <button class="mode-button" type="button" data-mode="developer" onclick="selectMode('developer')">
-                        <span class="mode-icon">💻</span>
-                        <span class="mode-text">
-                            <strong>Developer</strong>
-                            <small>Code and technology</small>
-                        </span>
-                    </button>
+Үшеуін біріктірсең, толық веб-сайт жасай аласың.
+`;
 
-                    <button class="mode-button" type="button" data-mode="motivation" onclick="selectMode('motivation')">
-                        <span class="mode-icon">🚀</span>
-                        <span class="mode-text">
-                            <strong>Motivation</strong>
-                            <small>Goals and productivity</small>
-                        </span>
-                    </button>
-                </div>
-            </div>
+    }
 
-            <div class="sidebar-status">
-                <span class="status-dot"></span>
-                <span>AI Ready</span>
-            </div>
 
-            <div class="sidebar-footer">
-                <span>ARUZHAN AI</span>
-                <span>v1.0</span>
-            </div>
-        </aside>
+    /* CSS */
 
-        <!-- MAIN VIEW -->
-        <main class="main">
-            <header class="topbar">
-                <div class="topbar-left">
-                    <button class="mobile-menu-button" type="button" onclick="toggleSidebar()">☰</button>
-                    <div class="ai-header-info">
-                        <div class="ai-avatar">AI</div>
-                        <div>
-                            <h2>ARUZHAN AI</h2>
-                            <span class="online-status">
-                                <span class="online-dot"></span> Online
-                            </span>
-                        </div>
-                    </div>
-                </div>
+    if(
+        q.includes("css")
+    ){
 
-                <div class="topbar-right">
-                    <div class="current-mode" id="currentModeLabel">Companion</div>
-                    <button type="button" title="Чатты тазалау" onclick="clearChat()">🗑</button>
-                </div>
-            </header>
+        return `
+CSS веб-сайттың сыртқы көрінісін басқарады.
 
-            <section class="chat-wrapper" id="chatWrapper">
-                <div class="chat-messages" id="chatMessages">
-                    <div class="msg msg-ai">
-Сәлем! Мен **ARUZHAN AI** интеллектуалды көмекшісімін. Сұрағыңызды немесе тапсырмаңызды жазыңыз, мен қуана көмектесемін! ✨
-                        <div class="thank-you-card">
-                            💌 <strong>Құрметті қолданушы!</strong><br>
-                            Біздің ARUZHAN AI жүйесін таңдағаныңыз үшін алғыс білдіреміз! Сізге сапалы әрі жылдам көмек көрсету — біздің басты мақсатымыз.
-                        </div>
-                    </div>
-                </div>
-            </section>
+Мысалы:
 
-            <footer class="input-area">
-                <div class="input-container">
-                    <button type="button" title="Файл қосу" onclick="document.getElementById('fileInput').click()">📎</button>
-                    <textarea id="messageInput" class="message-input" placeholder="ARUZHAN AI-ға сұрағыңды жаз..." rows="1"></textarea>
-                    <button class="send-button" type="button" onclick="sendMessage()">➤</button>
-                </div>
+\`\`\`css
+body {
+    background: #08080d;
+    color: white;
+    font-family: Arial;
+}
 
-                <div class="input-hint">
-                    <span>Enter — жіберу</span>
-                    <span>Shift + Enter — жаңа жол</span>
-                </div>
+button {
+    background: purple;
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+}
+\`\`\`
 
-                <div class="ai-disclaimer">
-                    ARUZHAN AI қателесуі мүмкін. Маңызды ақпаратты тексеріп алыңыз.
-                </div>
-            </footer>
-        </main>
-    </div>
+CSS арқылы түстерді, өлшемдерді, орналасуды, анимацияны және responsive дизайнды жасауға болады.
+`;
 
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-    <input type="file" id="fileInput" hidden accept="image/*,.pdf,.txt,.doc,.docx">
+    }
 
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
-        let currentMode = "companion";
 
-        function selectMode(mode) {
-            currentMode = mode;
-            document.querySelectorAll(".mode-button").forEach(b => b.classList.remove("active"));
-            const btn = document.querySelector(`[data-mode="${mode}"]`);
-            if (btn) btn.classList.add("active");
+    /* JAVASCRIPT */
 
-            const modeNames = {
-                companion: "Companion",
-                smart: "Smart AI",
-                study: "Study",
-                developer: "Developer",
-                motivation: "Motivation"
-            };
+    if(
+        q.includes("javascript") ||
+        q === "js"
+    ){
 
-            document.getElementById("currentModeLabel").textContent = modeNames[mode] || "Companion";
-            if (window.innerWidth <= 768) toggleSidebar();
-        }
+        return `
+JavaScript — веб-сайтқа интерактивтілік қосатын бағдарламалау тілі.
 
-        function toggleSidebar() {
-            document.getElementById("sidebar").classList.toggle("open");
-            document.getElementById("sidebarOverlay").classList.toggle("active");
-        }
+Мысалы:
 
-        function clearChat() {
-            document.getElementById("chatMessages").innerHTML = 
-                '<div class="msg msg-ai">Чат тазартылды. Жаңа сұрақ қойсаңыз болады!</div>';
-        }
+\`\`\`javascript
+function hello() {
+    alert("Сәлем!");
+}
 
-        function sendMessage() {
-            const input = document.getElementById("messageInput");
-            const text = input.value.trim();
-            if (!text) return;
+hello();
+\`\`\`
 
-            const chat = document.getElementById("chatMessages");
-            const wrapper = document.getElementById("chatWrapper");
+JavaScript арқылы батырма әрекеттерін, чаттарды, калькуляторларды, ойындарды және веб-қосымшаларды жасауға болады.
+`;
 
-            // Пайдаланушы хабарламасын шығару
-            const userMsg = document.createElement("div");
-            userMsg.className = "msg msg-user";
-            userMsg.textContent = text;
-            chat.appendChild(userMsg);
+    }
 
-            input.value = "";
-            wrapper.scrollTop = wrapper.scrollHeight;
 
-            // Сұраққа сәйкес ақылды AI жауаб дайындау
-            setTimeout(() => {
-                const aiMsg = document.createElement("div");
-                aiMsg.className = "msg msg-ai";
-                
-                let responseText = "";
-                const lowerText = text.toLowerCase();
+    /* WEBSITE */
 
-                if (lowerText.includes("рахмет") || lowerText.includes("сау бол")) {
-                    responseText = "Оқасы жоқ! Әрқашан көмектесуге дайынмын. Сәттілік тілеймін! ✨";
-                } else if (lowerText.includes("сәлем") || lowerText.includes("салам")) {
-                    responseText = "Сәлем! Көңіл-күйіңіз қалай? Бүгін қандай тақырыпта сөйлесеміз немесе не көмек керек?";
-                } else {
-                    responseText = `[${currentMode.toUpperCase()} режимі]: Сұранысыңыз түсінікті!\n\n"${text}" бойынша барлық қажетті ақпарат пен шешімдерді әзірлеп жатырмын. Тағы қосымша сұрақтарыңыз болса жаза беріңіз!`;
-                }
+    if(
+        q.includes("сайт") ||
+        q.includes("веб")
+    ){
 
-                aiMsg.innerText = responseText;
-                chat.appendChild(aiMsg);
-                wrapper.scrollTop = wrapper.scrollHeight;
-            }, 600);
-        }
+        return `
+Сайт жасау үшін әдетте 3 негізгі технология қолданылады:
 
-        // Enter басқанда жіберу
-        document.getElementById("messageInput").addEventListener("keydown", function(e) {
-            if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
+1. HTML — құрылым.
+2. CSS — дизайн.
+3. JavaScript — функционал.
+
+Ал үлкен жобаларда React, Vue немесе Next.js сияқты технологиялар қолдануға болады.
+
+Егер AI сайт жасағың келсе, frontend + backend + AI API архитектурасы керек болады.
+`;
+
+    }
+
+
+    /* AI */
+
+    if(
+        q.includes("жасанды интеллект") ||
+        q.includes("artificial intelligence") ||
+        q.includes(" ai ") ||
+        q === "ai"
+    ){
+
+        return `
+Жасанды интеллект — компьютерлерге адамның ойлауына ұқсас тапсырмаларды орындауға мүмкіндік беретін технологиялар саласы.
+
+AI мәтін түсіну, сурет тану, дыбыс өңдеу, код жазу және сұрақтарға жауап беру сияқты жұмыстарды орындай алады.
+
+Мен сияқты AI жүйелер үлкен тілдік модельдер арқылы мәтінді өңдеп, жауап құрастырады.
+`;
+
+    }
+
+
+    /* STUDY */
+
+    if(
+        currentMode === "study"
+    ){
+
+        return `
+Жақсы. Оқу режимі қосылды 📚
+
+Мен тақырыпты қарапайым тілмен түсіндіріп, мысал келтіріп, соңында қысқа қорытынды жасап бере аламын.
+
+Сұрағыңды нақтырақ жазсаң, оны қадам-қадамымен түсіндіремін.
+`;
+
+    }
+
+
+    /* DEVELOPER */
+
+    if(
+        currentMode === "developer"
+    ){
+
+        return `
+Developer режимі қосылды 💻
+
+Мен бағдарламалау логикасын түсіндіруге, код құрылымын құруға және қателерді талдауға көмектесе аламын.
+
+Қолданылатын технологиялар:
+• HTML
+• CSS
+• JavaScript
+• React
+• Python
+• Node.js
+• API
+• Database
+
+Кодыңды немесе қатені жіберсең, талдап шығуға болады.
+`;
+
+    }
+
+
+    /* MOTIVATION */
+
+    if(
+        currentMode === "motivation"
+    ){
+
+        return `
+Бастысы — бірден бәрін жасауға тырыспау. 🚀
+
+Бір үлкен мақсатты кішкентай қадамдарға бөл.
+
+Бүгін:
+1. Бір нақты мақсат таңда.
+2. 30–60 минут соған жұмыс істе.
+3. Нәтижеңді тексер.
+4. Ертең келесі қадамды жаса.
+
+Кішкентай тұрақты әрекеттер үлкен нәтижеге алып келеді.
+`;
+
+    }
+
+
+    /* CALCULATOR */
+
+    if(
+        /^[0-9+\-*/().%\s]+$/.test(q)
+    ){
+
+        try{
+
+            const result =
+                Function(
+                    '"use strict";return (' +
+                    q +
+                    ')'
+                )();
+
+            if(
+                typeof result === "number" &&
+                isFinite(result)
+            ){
+
+                return `
+Есептің жауабы:
+
+**${result}**
+`;
+
             }
-        });
 
-        // Файл таңдау
-        document.getElementById("fileInput").addEventListener("change", function() {
-            if (this.files && this.files[0]) {
-                alert("Файл жүктелді: " + this.files[0].name);
-            }
-        });
-    </script>
+        }catch(e){}
+
+    }
+
+
+    /* TIME */
+
+    if(
+        q.includes("сағат") ||
+        q.includes("уақыт")
+    ){
+
+        return `
+Қазіргі уақыт:
+
+**${
+    new Date()
+    .toLocaleTimeString(
+        "kk-KZ",
+        {
+            hour:"2-digit",
+            minute:"2-digit"
+        }
+    )
+}**
+
+Егер басқа қаладағы уақыт керек болса, қала атауын жаз.
+`;
+
+    }
+
+
+    /* DATE */
+
+    if(
+        q.includes("бүгін") &&
+        q.includes("күн")
+    ){
+
+        return `
+Бүгінгі күн:
+
+**${
+    new Date()
+    .toLocaleDateString(
+        "kk-KZ",
+        {
+            year:"numeric",
+            month:"long",
+            day:"numeric"
+        }
+    )
+}**
+`;
+
+    }
+
+
+    /* HELP */
+
+    if(
+        q.includes("көмектес") ||
+        q.includes("не істей аласың")
+    ){
+
+        return `
+Мен мына бағыттарда көмектесе аламын:
+
+💻 Бағдарламалау
+🌐 Сайт жасау
+🤖 AI жобалар
+📚 Оқу
+📝 Мәтін жазу
+💡 Идеялар
+🚀 Жоба жоспарлау
+🧠 Тақырып түсіндіру
+📊 Ақпаратты құрылымдау
+🎯 Мақсат қою
+
+Сұрағыңды нақты жаз — бірге шешім іздейміз.
+`;
+
+    }
+
+
+    /* DEFAULT */
+
+    const responses = [
+
+        `
+Қызықты сұрақ екен. 🤔
+
+Мен бұл сұрақты талдап көрейін.
+
+Сұрағыңды сәл нақтырақ жазсаң, саған пайдалырақ және толық жауап бере аламын.
+`,
+
+        `
+Түсіндім.
+
+Бұл тақырып бойынша көмектесе аламын. Мәселені бірнеше бөлікке бөліп қарастырсақ, шешімін табу оңайырақ болады.
+
+Нақты не қажет екенін жаз.
+`,
+
+        `
+Жақсы сұрақ.
+
+Менің қазіргі режимім — **${currentMode}**.
+
+Сұрағыңды нақтылап жазсаң, мен оны осы режимге сәйкес талдап жауап беремін.
+`
+
+    ];
+
+    return responses[
+        Math.floor(
+            Math.random() *
+            responses.length
+        )
+    ];
+
+}
+
+
+/* =========================================================
+   NEW CHAT
+   ========================================================= */
+
+function newChat(){
+
+    messagesBox.innerHTML = "";
+
+    welcome.style.display = "block";
+
+    messages = [];
+
+    input.value = "";
+
+    localStorage.removeItem(
+        "aruzhan_chat"
+    );
+
+}
+
+
+/* =========================================================
+   CLEAR CHAT
+   ========================================================= */
+
+function clearChat(){
+
+    if(
+        confirm("Чат тарихын тазалаймыз ба?")
+    ){
+
+        newChat();
+
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE SIDEBAR
+   ========================================================= */
+
+function toggleSidebar(){
+
+    document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+
+}
+
+
+/* =========================================================
+   LOCAL STORAGE
+   ========================================================= */
+
+function saveChat(){
+
+    localStorage.setItem(
+        "aruzhan_chat",
+        JSON.stringify(messages)
+    );
+
+}
+
+
+/* =========================================================
+   INITIALIZATION
+   ========================================================= */
+
+window.addEventListener(
+    "load",
+    () => {
+
+        input.focus();
+
+    }
+);
+
+
+/* =========================================================
+   ENTER KEY
+   ========================================================= */
+
+input.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.key === "Enter" &&
+            !event.shiftKey
+        ){
+
+            event.preventDefault();
+
+            sendMessage();
+
+        }
+
+    }
+);
+
+</script>
+
 </body>
 </html>
