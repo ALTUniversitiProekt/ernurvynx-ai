@@ -1,2244 +1,1998 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#08080d">
+
+<title>ARUZHAN AI — Қарым-қатынасқа көмектесетін AI</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --bg:#08080d;
+    --card:#11111a;
+    --border:rgba(255,255,255,.08);
+    --text:#f8f8fb;
+    --muted:#92929f;
+    --purple:#9b6cff;
+    --pink:#ec4899;
+    --gradient:linear-gradient(135deg,#8b5cf6,#ec4899);
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    min-height:100vh;
+    background:
+    radial-gradient(circle at 15% 10%,rgba(139,92,246,.16),transparent 30%),
+    radial-gradient(circle at 90% 20%,rgba(236,72,153,.09),transparent 28%),
+    var(--bg);
+    color:var(--text);
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+}
+
+::-webkit-scrollbar{
+    width:7px;
+}
+
+::-webkit-scrollbar-track{
+    background:#08080d;
+}
+
+::-webkit-scrollbar-thumb{
+    background:rgba(255,255,255,.12);
+    border-radius:20px;
+}
+
+/* NAVBAR */
+
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:72px;
+    z-index:1000;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 6%;
+    background:rgba(8,8,13,.78);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    text-decoration:none;
+    color:white;
+}
+
+.logo-icon{
+    width:42px;
+    height:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:13px;
+    background:var(--gradient);
+    font-size:11px;
+    font-weight:900;
+    box-shadow:0 8px 30px rgba(139,92,246,.3);
+}
+
+.logo-text{
+    display:flex;
+    flex-direction:column;
+}
+
+.logo-text strong{
+    font-size:14px;
+    letter-spacing:.8px;
+}
+
+.logo-text span{
+    margin-top:2px;
+    color:#777783;
+    font-size:9px;
+}
+
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:25px;
+}
+
+.nav-links a{
+    color:var(--muted);
+    text-decoration:none;
+    font-size:12px;
+    transition:.2s;
+}
+
+.nav-links a:hover{
+    color:white;
+}
+
+.nav-button{
+    padding:10px 18px;
+    border:1px solid rgba(155,108,255,.3);
+    border-radius:10px;
+    background:rgba(155,108,255,.1);
+    color:white;
+    text-decoration:none;
+    font-size:11px;
+}
+
+/* HERO */
+
+.hero{
+    min-height:100vh;
+    padding:150px 6% 80px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 14px;
+    border:1px solid rgba(155,108,255,.25);
+    border-radius:50px;
+    background:rgba(155,108,255,.08);
+    color:#c4aaff;
+    font-size:10px;
+    letter-spacing:.5px;
+    margin-bottom:25px;
+}
+
+.badge-dot{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:#a78bfa;
+    box-shadow:0 0 12px rgba(167,139,250,.9);
+}
+
+.hero h1{
+    max-width:850px;
+    font-size:clamp(42px,7vw,78px);
+    line-height:1.03;
+    letter-spacing:-3px;
+    margin-bottom:22px;
+    background:linear-gradient(135deg,#ffffff 20%,#c4b5fd 55%,#f9a8d4 100%);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.hero p{
+    max-width:600px;
+    color:var(--muted);
+    font-size:15px;
+    line-height:1.7;
+    margin-bottom:35px;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+
+.primary-button,
+.secondary-button{
+    padding:14px 24px;
+    border-radius:12px;
+    font-size:12px;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.primary-button{
+    border:none;
+    background:var(--gradient);
+    color:white;
+    font-weight:700;
+    box-shadow:0 12px 35px rgba(139,92,246,.22);
+}
+
+.secondary-button{
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.03);
+    color:white;
+}
+
+/* CHAT PREVIEW */
+
+.chat-preview{
+    width:min(850px,100%);
+    margin-top:70px;
+    padding:1px;
+    border-radius:22px;
+    background:linear-gradient(135deg,rgba(139,92,246,.35),rgba(236,72,153,.12),transparent);
+}
+
+.chat-window{
+    border-radius:21px;
+    background:rgba(13,13,20,.96);
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.05);
+}
+
+.chat-header{
+    height:60px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:0 18px;
+    border-bottom:1px solid var(--border);
+}
+
+.ai-avatar{
+    width:35px;
+    height:35px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:10px;
+    background:var(--gradient);
+    font-size:9px;
+    font-weight:900;
+}
+
+.chat-header-info{
+    text-align:left;
+}
+
+.chat-header-info strong{
+    font-size:12px;
+}
+
+.chat-header-info span{
+    display:block;
+    color:#6f6f7b;
+    font-size:9px;
+    margin-top:3px;
+}
+
+.online{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:#22c55e;
+    margin-left:auto;
+}
+
+.preview-messages{
+    padding:25px;
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+    text-align:left;
+}
+
+.preview-message{
+    max-width:75%;
+    padding:12px 15px;
+    border-radius:14px;
+    font-size:12px;
+    line-height:1.6;
+}
+
+.preview-message.ai{
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.06);
+}
+
+.preview-message.user{
+    align-self:flex-end;
+    background:rgba(139,92,246,.16);
+    border:1px solid rgba(139,92,246,.2);
+}
+
+.preview-input{
+    margin:0 15px 15px;
+    height:48px;
+    display:flex;
+    align-items:center;
+    padding:0 8px 0 15px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    color:#555560;
+    font-size:11px;
+}
+
+.preview-send{
+    margin-left:auto;
+    width:34px;
+    height:34px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:9px;
+    background:var(--gradient);
+    color:white;
+}
+
+/* SECTIONS */
+
+.section,
+.ai-section,
+.thanks-section{
+    padding:100px 6%;
+}
+
+.section-header{
+    max-width:650px;
+    margin:0 auto 50px;
+    text-align:center;
+}
+
+.section-label{
+    color:#a78bfa;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    margin-bottom:12px;
+}
+
+.section-header h2{
+    font-size:clamp(28px,4vw,45px);
+    letter-spacing:-1.5px;
+    margin-bottom:15px;
+}
+
+.section-header p{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.7;
+}
+
+/* FEATURES */
+
+.features{
+    max-width:1100px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+}
+
+.feature{
+    padding:25px;
+    min-height:210px;
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015));
+    transition:.3s;
+}
+
+.feature:hover{
+    transform:translateY(-5px);
+    border-color:rgba(139,92,246,.25);
+}
+
+.feature-icon{
+    width:45px;
+    height:45px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:13px;
+    background:rgba(139,92,246,.1);
+    font-size:20px;
+    margin-bottom:20px;
+}
+
+.feature h3{
+    font-size:14px;
+    margin-bottom:8px;
+}
+
+.feature p{
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.7;
+}
+
+/* AI */
+
+.ai-container{
+    max-width:950px;
+    margin:auto;
+    padding:1px;
+    border-radius:24px;
+    background:linear-gradient(135deg,rgba(139,92,246,.3),rgba(236,72,153,.1),transparent);
+}
+
+.ai-chat{
+    background:#0d0d14;
+    border-radius:23px;
+    overflow:hidden;
+}
+
+.ai-top{
+    height:68px;
+    padding:0 22px;
+    display:flex;
+    align-items:center;
+    border-bottom:1px solid var(--border);
+}
+
+.ai-top .ai-avatar{
+    margin-right:12px;
+}
+
+.ai-top h3{
+    font-size:13px;
+}
+
+.ai-top p{
+    color:#6e6e7a;
+    font-size:9px;
+    margin-top:3px;
+}
+
+.ai-top-status{
+    margin-left:auto;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    color:#777783;
+    font-size:9px;
+}
+
+.ai-top-status i{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:#22c55e;
+}
+
+.chat-body{
+    min-height:350px;
+    max-height:520px;
+    overflow-y:auto;
+    padding:25px;
+}
+
+.welcome-ai{
+    text-align:center;
+    padding:30px 10px 20px;
+}
+
+.big-icon{
+    width:60px;
+    height:60px;
+    margin:0 auto 18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:18px;
+    background:var(--gradient);
+    font-weight:900;
+}
+
+.welcome-ai h2{
+    font-size:23px;
+    margin-bottom:10px;
+}
+
+.welcome-ai p{
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.7;
+}
+
+.quick-buttons{
+    max-width:650px;
+    margin:25px auto 0;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+}
+
+.quick-button{
+    padding:12px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:rgba(255,255,255,.025);
+    color:#b5b5c0;
+    font-size:10px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.quick-button:hover{
+    color:white;
+    background:rgba(139,92,246,.1);
+    border-color:rgba(139,92,246,.3);
+}
+
+.real-message{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+    animation:messageIn .3s ease;
+}
+
+.real-message.user{
+    flex-direction:row-reverse;
+}
+
+.real-avatar{
+    width:32px;
+    height:32px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:9px;
+    background:rgba(255,255,255,.07);
+    font-size:8px;
+    font-weight:800;
+}
+
+.real-message.ai .real-avatar{
+    background:var(--gradient);
+}
+
+.real-content{
+    max-width:75%;
+}
+
+.real-text{
+    padding:11px 14px;
+    border-radius:5px 14px 14px 14px;
+    background:rgba(255,255,255,.045);
+    border:1px solid var(--border);
+    font-size:12px;
+    line-height:1.7;
+}
+
+.real-message.user .real-text{
+    border-radius:14px 5px 14px 14px;
+    background:rgba(139,92,246,.13);
+}
+
+.real-time{
+    color:#555560;
+    font-size:8px;
+    margin-top:4px;
+}
+
+.chat-input-area{
+    padding:14px;
+    border-top:1px solid var(--border);
+}
+
+.chat-input{
+    min-height:52px;
+    display:flex;
+    align-items:flex-end;
+    gap:8px;
+    padding:7px 7px 7px 13px;
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:14px;
+    background:rgba(255,255,255,.025);
+}
+
+.chat-input:focus-within{
+    border-color:rgba(139,92,246,.45);
+}
+
+.chat-input textarea{
+    flex:1;
+    min-width:0;
+    min-height:37px;
+    max-height:140px;
+    resize:none;
+    border:none;
+    outline:none;
+    background:transparent;
+    color:white;
+    font-family:inherit;
+    font-size:12px;
+    padding:10px 3px;
+}
+
+.chat-input textarea::placeholder{
+    color:#5b5b66;
+}
+
+.send-button{
+    width:38px;
+    height:38px;
+    flex-shrink:0;
+    border:none;
+    border-radius:10px;
+    background:var(--gradient);
+    color:white;
+    cursor:pointer;
+}
+
+.send-button:disabled{
+    opacity:.5;
+}
+
+/* THANKS */
+
+.thanks-card{
+    max-width:850px;
+    margin:auto;
+    padding:65px 40px;
+    text-align:center;
+    border:1px solid rgba(236,72,153,.14);
+    border-radius:25px;
+    background:radial-gradient(circle at 50% 0%,rgba(236,72,153,.1),transparent 55%),rgba(255,255,255,.02);
+}
+
+.heart{
+    font-size:38px;
+    margin-bottom:20px;
+}
+
+.thanks-card h2{
+    font-size:clamp(27px,4vw,42px);
+    margin-bottom:20px;
+}
+
+.thanks-card p{
+    max-width:650px;
+    margin:0 auto 15px;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.9;
+}
+
+.special-thanks{
+    margin-top:35px!important;
+    color:#f3d5e7!important;
+    font-size:15px!important;
+    font-weight:600;
+}
+
+.signature{
+    margin-top:25px;
+    color:#a78bfa;
+    font-size:11px;
+    letter-spacing:1px;
+}
+
+footer{
+    padding:30px 6%;
+    border-top:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+    color:#555560;
+    font-size:9px;
+}
+
+@keyframes messageIn{
+    from{
+        opacity:0;
+        transform:translateY(8px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@media(max-width:800px){
+
+    .nav-links{
+        display:none;
+    }
+
+    .navbar{
+        padding:0 18px;
+    }
+
+    .hero{
+        padding:130px 18px 60px;
+    }
+
+    .hero h1{
+        letter-spacing:-2px;
+    }
+
+    .section,
+    .ai-section,
+    .thanks-section{
+        padding:75px 18px;
+    }
+
+    .features{
+        grid-template-columns:1fr;
+    }
+
+    .quick-buttons{
+        grid-template-columns:1fr;
+    }
+
+    .preview-message{
+        max-width:90%;
+    }
+
+    .thanks-card{
+        padding:45px 20px;
+    }
+
+    footer{
+        flex-direction:column;
+        gap:10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+
+<a href="#home" class="logo">
+<div class="logo-icon">AI</div>
+<div class="logo-text">
+<strong>ARUZHAN AI</strong>
+<span>Relationship Assistant</span>
+</div>
+</a>
+
+<div class="nav-links">
+<a href="#home">Басты бет</a>
+<a href="#features">Мүмкіндіктер</a>
+<a href="#ai">AI</a>
+<a href="#thanks">Алғыс</a>
+</div>
+
+<a href="#ai" class="nav-button">AI-мен сөйлесу</a>
+
+</nav>
+
+<section class="hero" id="home">
+
+<div class="badge">
+<span class="badge-dot"></span>
+ARUZHAN AI — YOUR CONVERSATION ASSISTANT
+</div>
+
+<h1>
+Қызбен сөйлесуге
+не жазарыңды білмей
+тұрсың ба?
+</h1>
+
+<p>
+ARUZHAN AI — әңгіме бастауға,
+жауап жазуға және сөйлесуді
+табиғи түрде жалғастыруға
+көмектесетін ақылды AI көмекші.
+</p>
+
+<div class="hero-buttons">
+
+<a href="#ai" class="primary-button">
+🤍 ARUZHAN AI-мен сөйлесу
+</a>
+
+<a href="#features" class="secondary-button">
+Мүмкіндіктерді көру
+</a>
+
+</div>
+
+<div class="chat-preview">
+
+<div class="chat-window">
+
+<div class="chat-header">
+
+<div class="ai-avatar">AI</div>
+
+<div class="chat-header-info">
+<strong>ARUZHAN AI</strong>
+<span>Саған көмектесуге дайын</span>
+</div>
+
+<div class="online"></div>
+
+</div>
+
+<div class="preview-messages">
+
+<div class="preview-message user">
+Не жазарымды білмей тұрмын.
+Ол «күнің қалай өтті?» деп сұрады.
+</div>
+
+<div class="preview-message ai">
+Оған табиғи түрде жауап беріп,
+әңгімені жалғастыруға болады:
+«Жақсы өтті 😊 Бүгін біраз шаршатты.
+Ал өзіңнің күнің қалай өтті?»
+</div>
+
+</div>
+
+<div class="preview-input">
+ARUZHAN AI-дан сұра...
+<div class="preview-send">➤</div>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="section" id="features">
+
+<div class="section-header">
+
+<div class="section-label">AI FEATURES</div>
+
+<h2>Әңгімеде жалғыз қалма</h2>
+
+<p>
+Не жазуды білмей қалған кезіңде
+ARUZHAN AI саған ойыңды дұрыс
+жеткізуге көмектеседі.
+</p>
+
+</div>
+
+<div class="features">
+
+<div class="feature">
+<div class="feature-icon">💬</div>
+<h3>Не жазамын?</h3>
+<p>Қыздың хабарламасын жаз. AI жағдайға сәйкес табиғи әрі орынды жауаптар ұсынады.</p>
+</div>
+
+<div class="feature">
+<div class="feature-icon">✨</div>
+<h3>Әңгіме бастау</h3>
+<p>Бірінші болып не жазарыңды білмесең, жағдайға сәйкес әңгіме бастау идеяларын ал.</p>
+</div>
+
+<div class="feature">
+<div class="feature-icon">😄</div>
+<h3>Қызықты сұрақ</h3>
+<p>Әңгіме тоқтап қалғанда, сөйлесуді жалғастыруға арналған қызықты сұрақтар ұсын.</p>
+</div>
+
+<div class="feature">
+<div class="feature-icon">❤️</div>
+<h3>Жауапты әдемі жазу</h3>
+<p>Құрғақ немесе қысқа мәтінді табиғи, жылы және түсінікті түрде қайта құрастырып бер.</p>
+</div>
+
+<div class="feature">
+<div class="feature-icon">🤔</div>
+<h3>Ол не айтқысы келді?</h3>
+<p>Келген хабарламаның мағынасын талдап, адамның не айтқысы келгенін түсінуге көмектес.</p>
+</div>
+
+<div class="feature">
+<div class="feature-icon">📝</div>
+<h3>Жауап нұсқалары</h3>
+<p>Бір жағдайға бірнеше түрлі жауап ал: қарапайым, қызықты, әзілмен немесе жылы түрде.</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="ai-section" id="ai">
+
+<div class="section-header">
+
+<div class="section-label">ARUZHAN AI</div>
+
+<h2>Саған не көмектесейін?</h2>
+
+<p>
+Жағдайыңды жаз.
+Мен саған сәйкес жауап
+дайындауға көмектесемін.
+</p>
+
+</div>
+
+<div class="ai-container">
+
+<div class="ai-chat">
+
+<div class="ai-top">
+
+<div class="ai-avatar">AI</div>
+
+<div>
+<h3>ARUZHAN AI</h3>
+<p>Conversation Assistant</p>
+</div>
+
+<div class="ai-top-status">
+<i></i>
+Online
+</div>
+
+</div>
+
+<div class="chat-body" id="chatBody">
+
+<div class="welcome-ai" id="welcomeAI">
+
+<div class="big-icon">AI</div>
+
+<h2>Сәлем! 🤍</h2>
+
+<p>
+Мен ARUZHAN AI.
+Қызбен сөйлесуге байланысты
+кез келген жағдайды жаз.
+Бірге жақсы жауап ойлап табамыз.
+</p>
+
+<div class="quick-buttons">
+
+<button class="quick-button" onclick="quickQuestion('Мен қызға бірінші рет жазғалы тұрмын. Не жазсам болады?')">
+✨ Әңгіме бастау
+</button>
+
+<button class="quick-button" onclick="quickQuestion('Ол маған: Күнің қалай өтті? деп жазды. Не деп жауап берейін?')">
+💬 Не жазамын?
+</button>
+
+<button class="quick-button" onclick="quickQuestion('Әңгіме тоқтап қалды. Қандай қызықты сұрақ қойсам болады?')">
+😄 Қызықты сұрақ
+</button>
+
+<button class="quick-button" onclick="quickQuestion('Менің жауабымды жылы әрі әдемі етіп жазып берші')">
+❤️ Әдемі жауап
+</button>
+
+<button class="quick-button" onclick="quickQuestion('Ол маған: Жарайды көре жатармыз деп жазды. Бұл нені білдіруі мүмкін?')">
+🤔 Мағынасын түсіну
+</button>
+
+<button class="quick-button" onclick="quickQuestion('Маған бір жағдайға бірнеше жауап нұсқасын берші')">
+📝 Нұсқалар
+</button>
+
+</div>
+
+</div>
+
+<div id="messages"></div>
+
+<div id="typing" style="
+display:none;
+color:#777783;
+font-size:10px;
+padding:10px;
+">
+ARUZHAN AI ойланып жатыр...
+</div>
+
+</div>
+
+<div class="chat-input-area">
+
+<div class="chat-input">
+
+<textarea
+id="messageInput"
+placeholder="Жағдайыңды немесе оның хабарламасын жаз..."
+rows="1"></textarea>
+
+<button
+type="button"
+class="send-button"
+id="sendButton">
+➤
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="thanks-section" id="thanks">
+
+<div class="thanks-card">
+
+<div class="heart">🤍</div>
+
+<div class="section-label">SPECIAL THANKS</div>
+
+<h2>Бұл жоба не үшін жасалды?</h2>
+
+<p>
+ARUZHAN AI — адамдарға қарым-қатынаста
+өз ойын еркін жеткізуге, әңгіме бастауға
+және кейде не жазарын білмей қалған
+сәттерде қолдау көрсету мақсатында
+жасалған AI жоба.
+</p>
+
+<p>
+Кейде алғашқы қадам жасау қиын.
+Кейде қарапайым ғана жауапты қалай
+жазуды білмей қаласың.
+ARUZHAN AI дәл осындай сәттерде
+саған идея беріп, ойыңды дұрыс
+жеткізуге көмектеседі.
+</p>
+
+<p class="special-thanks">
+Аружанға арнайы алғысымызды білдіреміз. 🤍
+<br><br>
+Аружан, осы жобаның пайда болуына
+шабыт бергенің және оны қолдағаның
+үшін саған үлкен рақмет!
+</p>
+
+<div class="signature">
+MADE WITH RESPECT FOR ARUZHAN
+</div>
+
+</div>
+
+</section>
+
+<footer>
+
+<span>
+© 2026 <strong>ARUZHAN AI</strong>
+</span>
+
+<span>
+Conversation Assistant
+</span>
+
+</footer>
+
+<script>
+
 /* =========================================================
-   EXTRA AI RESPONSES — ҚОСЫМША 100+ ЖАҒДАЙ
+   ARUZHAN AI — WORKING CHAT
 ========================================================= */
 
-/* 1. Қалайсың? */
-if(
-    q.includes("қалайсың") ||
-    q.includes("қал қалай") ||
-    q.includes("жағдайың қалай")
-){
-    return `
-Жақсымын 😊 Рақмет сұрағаныңа!
+const input = document.getElementById("messageInput");
+const messages = document.getElementById("messages");
+const chatBody = document.getElementById("chatBody");
+const welcomeAI = document.getElementById("welcomeAI");
+const typing = document.getElementById("typing");
+const sendButton = document.getElementById("sendButton");
 
-Ал сенің жағдайың қалай?
 
-Егер бір нәрсе туралы кеңес керек болса, жағдайыңды толық жаза бер. Мен саған:
-• не жазу керегін;
-• әңгімені қалай бастау керегін;
-• қалай жауап берген дұрыс екенін;
-• бірнеше жауап нұсқасын;
-• хабарламаның мағынасын
-түсіндіріп бере аламын. 🤍
-`;
+/* ENTER */
+
+input.addEventListener("keydown", function(event){
+
+    if(event.key === "Enter" && !event.shiftKey){
+
+        event.preventDefault();
+
+        sendMessage();
+
+    }
+
+});
+
+
+/* AUTO RESIZE */
+
+input.addEventListener("input", function(){
+
+    this.style.height = "auto";
+
+    this.style.height =
+        Math.min(this.scrollHeight,140) + "px";
+
+});
+
+
+/* SEND */
+
+sendButton.addEventListener("click", sendMessage);
+
+
+/* QUICK */
+
+function quickQuestion(text){
+
+    input.value = text;
+
+    input.dispatchEvent(new Event("input"));
+
+    sendMessage();
+
 }
 
 
-/* 2. Не істеп жатырсың? */
-if(
-    q.includes("не істеп жатырсың") ||
-    q.includes("не істеп жатыр")
-){
-    return `
-Егер ол саған «Не істеп жатырсың?» деп жазса, қысқа жауап беріп қана қоймай, әңгімені жалғастыруға болады.
+/* MAIN SEND */
+
+function sendMessage(){
+
+    const text = input.value.trim();
+
+    if(!text) return;
+
+    welcomeAI.style.display = "none";
+
+    addMessage(text,"user");
+
+    input.value = "";
+
+    input.style.height = "auto";
+
+    sendButton.disabled = true;
+
+    typing.style.display = "block";
+
+    setTimeout(function(){
+
+        const answer = generateResponse(text);
+
+        typing.style.display = "none";
+
+        addMessage(answer,"ai");
+
+        sendButton.disabled = false;
+
+    },700);
+
+}
+
+
+/* ADD MESSAGE */
+
+function addMessage(text,type){
+
+    const message = document.createElement("div");
+
+    message.className =
+        "real-message " + type;
+
+    const avatar =
+        document.createElement("div");
+
+    avatar.className = "real-avatar";
+
+    avatar.textContent =
+        type === "ai" ? "AI" : "YOU";
+
+    const content =
+        document.createElement("div");
+
+    content.className =
+        "real-content";
+
+    const textElement =
+        document.createElement("div");
+
+    textElement.className =
+        "real-text";
+
+    textElement.innerHTML =
+        formatText(text);
+
+    const time =
+        document.createElement("div");
+
+    time.className =
+        "real-time";
+
+    time.textContent =
+        new Date().toLocaleTimeString(
+            "kk-KZ",
+            {
+                hour:"2-digit",
+                minute:"2-digit"
+            }
+        );
+
+    content.appendChild(textElement);
+
+    content.appendChild(time);
+
+    message.appendChild(avatar);
+
+    message.appendChild(content);
+
+    messages.appendChild(message);
+
+    setTimeout(function(){
+
+        chatBody.scrollTo({
+            top:chatBody.scrollHeight,
+            behavior:"smooth"
+        });
+
+    },50);
+
+}
+
+
+/* FORMAT */
+
+function formatText(text){
+
+    return text
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>")
+        .replace(/\n/g,"<br>");
+
+}
+
+
+/* AI RESPONSE ENGINE */
+
+function generateResponse(question){
+
+    const q =
+        question
+        .toLowerCase()
+        .trim();
+
+
+    /* 1 */
+
+    if(
+        q.includes("бірінші рет") ||
+        q.includes("бірінші болып") ||
+        q.includes("алғашқы рет") ||
+        q.includes("бірінші жаз")
+    ){
+
+        return `Бірінші хабарлама қысқа әрі табиғи болғаны жақсы 😊
+
+Мына нұсқаларды қолдануға болады:
+
+1. «Сәлем 😊 Қалайсың?»
+
+2. «Сәлем! Күнің қалай өтіп жатыр?»
+
+3. «Сәлем 😊 Бір қызық сұрақ қойсам бола ма?»
+
+4. «Сәлем! Бүгін көңіл-күйің қалай?»
+
+5. «Сәлем 😊 Сенімен сөйлесіп көргім келіп жүр еді.»
+
+Ең дұрысы — өзіңе табиғи көрінетін нұсқаны таңдау.`;
+
+    }
+
+
+    /* 2 */
+
+    if(
+        q.includes("күнің қалай") ||
+        q.includes("күнің қалай өтті")
+    ){
+
+        return `Егер ол «Күнің қалай өтті?» деп сұраса, тек «жақсы» деп тоқтатпай, өзің де оған сұрақ қой.
 
 Мысалы:
 
-🙂 «Қазір демалып отырмын. Өзің ше?»
+«Жақсы өтті 😊 Біраз шаршатты, бірақ жаман емес. Ал сенің күнің қалай өтті?»
 
-😄 «Сенімен сөйлесіп отырмын ғой 😄 Ал өзің не істеп жатырсың?»
+Немесе:
 
-💬 «Қазір өз шаруаларыммен отырмын. Сенің күнің қалай өтіп жатыр?»
+«Жақсы өтті 😄 Бүгін біраз қызық жағдай болды. Өзіңнің күнің қалай өтті?»`;
 
-Ең жақсысы — өзіңнің шынайы жағдайыңа сәйкес жауап беру.
-`;
-}
+    }
 
 
-/* 3. Қайдасың? */
-if(
-    q.includes("қайдасың") ||
-    q.includes("қай жердесің")
-){
-    return `
-«Қайдасың?» деген сұраққа қарапайым әрі табиғи жауап берген дұрыс.
+    /* 3 */
 
-Мысалы:
+    if(
+        q.includes("әңгіме тоқтап") ||
+        q.includes("әңгіме біт") ||
+        q.includes("не сұрақ қой")
+    ){
 
-«Үйдемін 😊 Өзің қайдасың?»
+        return `Әңгіме тоқтап қалса, мына сұрақтарды қолданып көр:
 
-«Қаладамын, қазір бос отырмын. Сен ше?»
+😄 «Егер дәл қазір кез келген жерге бара алсаң, қайда барар едің?»
 
-«Достарыммен жүрмін 😄 Өзің не істеп жүрсің?»
-
-Егер әңгімені жалғастырғың келсе, соңынан оған да сұрақ қой.
-`;
-}
-
-
-/* 4. Боссың ба? */
-if(
-    q.includes("боссың ба") ||
-    q.includes("боссың") ||
-    q.includes("уақытың бар ма")
-){
-    return `
-Егер ол «Боссың ба?» деп сұраса, жауап жағдайға байланысты.
-
-Егер бос болсаң:
-«Иә, қазір босмын 😊 Не болды?»
-
-Сәл еркінірек:
-«Иә 😄 Айта бер, тыңдап тұрмын.»
-
-Егер бос болмасаң:
-«Қазір біраз шаруам бар, бірақ кейін міндетті түрде сөйлесеміз 😊»
-
-Осылай жауап берсең, адамға қызығушылық танытқаның көрінеді.
-`;
-}
-
-
-/* 5. Рақмет */
-if(
-    q.includes("рақмет") ||
-    q.includes("рахмет")
-){
-    return `
-Егер ол саған «Рақмет» десе, жағдайға қарай былай жауап беруге болады:
-
-🙂 «Оқасы жоқ 😊»
-
-😄 «Әрқашан!»
-
-💬 «Әрине, ештеңе етпейді.»
-
-🤍 «Саған көмектесе алғаныма қуаныштымын.»
-
-Егер әңгіме жалғассын десең, жай ғана «Оқасы жоқ» деп тоқтамай, тақырыпқа байланысты бір нәрсе қосуға болады.
-`;
-}
-
-
-/* 6. Кешір */
-if(
-    q.includes("кешір") ||
-    q.includes("кешірші") ||
-    q.includes("кешіріңіз")
-){
-    return `
-Егер ол «Кешірші» деп жазса, бірден ашуланып немесе суық жауап берудің қажеті жоқ.
-
-Мысалы:
-
-«Ештеңе етпейді 😊»
-
-«Жарайды, түсіндім.»
-
-«Уайымдама, бәрі жақсы.»
-
-Егер жағдай маңызды болса, оның не үшін кешірім сұрағанын түсініп алған дұрыс.
-`;
-}
-
-
-/* 7. Жақсы */
-if(
-    q === "жақсы" ||
-    q.includes("жақсы екен") ||
-    q.includes("жақсы ғой")
-){
-    return `
-«Жақсы» деген жауаптан кейін әңгімені жалғастыру үшін оның айтқан тақырыбына байланысты сұрақ қой.
-
-Мысалы:
-
-«Жақсы екен 😊 Ал өзіңе қалай ұнады?»
-
-«Керемет 😄 Одан кейін не болды?»
-
-«Жақсы екен. Бұл нәрсеге бұрыннан қызығасың ба?»
-
-Бір сөзбен жауап беріп тоқтап қалмай, оның жауабына қызығушылық білдір.
-`;
-}
-
-
-/* 8. Иә */
-if(
-    q === "иә" ||
-    q === "ия" ||
-    q.includes("иә,")
-){
-    return `
-Егер ол тек «Иә» деп жауап берсе, бұл міндетті түрде қызықпайды деген сөз емес.
-
-Әңгіме контекстіне қара.
-
-Мысалы:
-
-«Түсіндім 😊 Ал неге олай ойлайсың?»
-
-«Иә 😄 Өзің бұл туралы не ойлайсың?»
-
-«Қызық екен. Толығырақ айтып берші.»
-
-Егер бірнеше рет қатарынан өте қысқа жауап берсе, әңгімені басқа тақырыпқа ауыстырып көр.
-`;
-}
-
-
-/* 9. Жоқ */
-if(
-    q === "жоқ" ||
-    q === "жок" ||
-    q.includes("жоқ,")
-){
-    return `
-Егер ол «Жоқ» деп жауап берсе, оның жауабын қалыпты қабылдаған дұрыс.
-
-Мысалы:
-
-«Жақсы, түсіндім 😊»
-
-«Жарайды, ештеңе етпейді.»
-
-«Түсінікті. Онда басқа нәрсе туралы сөйлесейік 😄»
-
-Егер бұл маңызды ұсынысқа берілген жауап болса, қысым жасамаған дұрыс.
-`;
-}
-
-
-/* 10. Қайырлы таң */
-if(
-    q.includes("қайырлы таң") ||
-    q.includes("қайырлы тан")
-){
-    return `
-Қайырлы таңға жауап ретінде:
-
-☀️ «Қайырлы таң! Күнің сәтті өтсін 😊»
-
-🙂 «Қайырлы таң! Қалай ұйықтадың?»
-
-😄 «Қайырлы таң! Бүгінгі көңіл-күй қалай?»
-
-🤍 «Қайырлы таң 😊 Саған жақсы күн тілеймін!»
-
-Егер әңгімені бастау үшін өзің жазып жатсаң, қысқа әрі табиғи болғаны жақсы.
-`;
-}
-
-
-/* 11. Қайырлы түн */
-if(
-    q.includes("қайырлы түн") ||
-    q.includes("қайырлы тун")
-){
-    return `
-Қайырлы түнге бірнеше табиғи жауап:
-
-«Қайырлы түн 😊 Жақсы демал!»
-
-«Саған да қайырлы түн. Ертеңгі күнің сәтті өтсін!»
-
-«Жақсы, тыныш ұйықта 😊»
-
-Егер жылырақ жауап бергің келсе:
-«Қайырлы түн 🤍 Жақсы демалып ал.»
-`;
-}
-
-
-/* 12. Сағындым */
-if(
-    q.includes("сағындым") ||
-    q.includes("сағындым сені")
-){
-    return `
-Егер ол «Сағындым» десе, жауабың өз сезіміңе байланысты болуы керек.
-
-Егер сен де сағынсаң:
-«Мен де сені сағындым 😊»
-
-Сәл жылырақ:
-«Шынымды айтсам, мен де сені сағынып жүр едім.»
-
-Егер не сезіп тұрғаныңды нақты білмесең:
-«Мұны есту жақсы екен 😊»
-`;
-}
-
-
-/* 13. Қызығасың ба? */
-if(
-    q.includes("қызығасың ба") ||
-    q.includes("қызығасың")
-){
-    return `
-Егер ол сенің бір нәрсеге қызығатыныңды сұраса, тек «Иә» немесе «Жоқ» деп жауап бермей, өзің туралы аздап айтып көр.
-
-Мысалы:
-
-«Иә, қызығамын. Соңғы кезде осы тақырыпты көп зерттеп жүрмін.»
-
-«Иә 😄 Ал сен ше?»
-
-«Бұрын аса қызықпайтынмын, бірақ қазір қызығып жүрмін.»
-
-Өзің туралы айтып, соңынан оған сұрақ қойсаң, әңгіме табиғи жалғасады.
-`;
-}
-
-
-/* 14. Хобби */
-if(
-    q.includes("хобби") ||
-    q.includes("немен айналысасың") ||
-    q.includes("қызығушылығың")
-){
-    return `
-Егер ол сенің хоббиіңді сұраса, шынайы нәрселеріңді айт.
-
-Мысалы:
-
-«Бос уақытымда музыка тыңдағанды ұнатамын. Кейде фильм көремін. Ал сенің хоббиің қандай?»
-
-«Технологияға қызығамын, жаңа нәрселер үйренген ұнайды. Өзің ше?»
-
-«Әртүрлі нәрсеге қызығамын 😄 Қазір ең көп айналысатыным — ...»
-
-Ең маңыздысы — ойдан шығармай, өзіңе жақын нәрсені айту.
-`;
-}
-
-
-/* 15. Музыка */
-if(
-    q.includes("қандай музыка") ||
-    q.includes("қандай ән") ||
-    q.includes("музыка тыңдайсың")
-){
-    return `
-Музыка туралы әңгіме бастау өте ыңғайлы.
-
-Мысалы:
-
-«Соңғы кезде қандай ән тыңдап жүрсің?»
-
-«Сенің сүйікті әншің кім?»
-
-«Маған да бір жақсы ән ұсыншы 😊»
-
-«Қандай музыка көңіл-күйіңді көтереді?»
-
-Егер оның сүйікті әнін білсең, сол ән туралы сұрап әңгімені жалғастыруға болады.
-`;
-}
-
-
-/* 16. Фильм */
-if(
-    q.includes("фильм") ||
-    q.includes("кино") ||
-    q.includes("сериал")
-){
-    return `
-Фильм немесе сериал туралы сөйлесу үшін:
+🎵 «Қазір қандай ән тыңдап жүрсің?»
 
 🎬 «Соңғы көрген жақсы фильмің қандай?»
 
-🍿 «Маған бір қызық фильм ұсыншы.»
+✈️ «Барғың келіп жүрген жер бар ма?»
 
-📺 «Қазір қандай сериал көріп жүрсің?»
+🍕 «Екеуіңнің ең сүйікті тағамың қандай?»
 
-😄 «Егер бүгін кешке бір фильм таңдау керек болса, қайсысын таңдар едің?»
+💭 «Сен туралы адамдар жиі қате ойлайтын нәрсе бар ма?»
 
-Оның жауабынан кейін өзіңнің де талғамыңды айтып, ортақ қызығушылық табуға тырыс.
-`;
-}
+🌙 «Кешті қалай өткізгенді ұнатасың?»`;
 
-
-/* 17. Ұйықтап жатырсың ба */
-if(
-    q.includes("ұйықтап жатырсың") ||
-    q.includes("ұйықтадың ба") ||
-    q.includes("ұйықтап қалдың")
-){
-    return `
-Жағдайға қарай:
-
-«Жоқ, әлі ұйықтаған жоқпын 😊»
-
-«Иә, енді ұйықтайын деп жатырмын.»
-
-«Ұйқым келіп тұр, бірақ әлі отырмын 😄»
-
-Егер түнде сөйлесіп отырсаң:
-«Өзің неге әлі ұйықтамадың?»
-деп сұрап, әңгімені жалғастыруға болады.
-`;
-}
+    }
 
 
-/* 18. Көңіл-күй */
-if(
-    q.includes("көңіл күйің") ||
-    q.includes("көңіл-күйің") ||
-    q.includes("көңіл күй")
-){
-    return `
-Егер ол «Көңіл-күйің қалай?» деп сұраса:
+    /* 4 */
 
-«Жақсы 😊 Бүгін көңіл-күйім керемет.»
+    if(
+        q.includes("не айтқысы") ||
+        q.includes("нені білдіреді") ||
+        q.includes("мағынасы") ||
+        q.includes("нені меңзеді")
+    ){
 
-«Жақсы, рақмет. Өзіңнің көңіл-күйің қалай?»
+        return `Хабарламаның нақты мағынасын контекстсіз анықтау қиын.
 
-Егер көңіл-күйің онша болмаса:
-«Сәл шаршап тұрмын, бірақ бәрі жақсы 😊»
+Маған:
+• оның нақты жазған сөзін;
+• сенің оған не жазғаныңды;
+• оған дейінгі әңгімені
 
-Шынайы жауап берген дұрыс. Әңгіме тек жақсы көріну үшін емес, бір-біріңді түсіну үшін де керек.
-`;
-}
+жіберсең, сол жағдайды бейтарап түрде талдап беремін.
 
+Бір ғана сөйлемге қарап адамның нақты ойын 100% анықтау мүмкін емес.`;
 
-/* 19. Неге жауап бермеді */
-if(
-    q.includes("жауап бермей") ||
-    q.includes("жауап бермейді") ||
-    q.includes("жауап жоқ")
-){
-    return `
-Егер ол жауап бермей жатса, бірден жаман нәрсе ойлаудың қажеті жоқ.
-
-Ол:
-• бос емес болуы мүмкін;
-• телефонын көрмеген болуы мүмкін;
-• шаршаған болуы мүмкін;
-• не деп жауап берерін ойлап жүрген болуы мүмкін.
-
-Бірден бірнеше хабарлама жібере берме.
-
-Біраз уақыт күтіп, кейін жеңіл түрде:
-«Қалайсың? 😊»
-немесе
-«Күнің қалай өтіп жатыр?»
-деп жазуға болады.
-
-Егер үнемі жауап бермесе, оның шекарасын құрметтеген дұрыс.
-`;
-}
+    }
 
 
-/* 20. Көрмей қойды */
-if(
-    q.includes("көрмей қойды") ||
-    q.includes("оқымай қойды") ||
-    q.includes("оқымады")
-){
-    return `
-Егер хабарламаңды оқымай жатса, асықпа.
+    /* 5 */
 
-Адамның онлайн болуы міндетті түрде хабарламаға жауап беруге дайын екенін білдірмейді.
+    if(
+        q.includes("әдемі жаз") ||
+        q.includes("жылы жаз") ||
+        q.includes("дұрыстап жаз") ||
+        q.includes("әдемі жауап")
+    ){
 
-Қайта-қайта:
-«Неге оқымайсың?»
-«Неге жауап бермейсің?»
-деп жазу қысым сияқты көрінуі мүмкін.
+        return `Әрине 😊
 
-Ең дұрысы — уақыт беру.
-`;
-}
-
-
-/* 21. Ұзақ жауап */
-if(
-    q.includes("ұзақ жауап") ||
-    q.includes("көп жазды") ||
-    q.includes("ұзын хабарлама")
-){
-    return `
-Егер ол саған ұзақ хабарлама жазса, бұл жақсы мүмкіндік.
-
-Оның айтқандарының бәрін елемей, тек бір сөзге жауап берме.
+Маған бастапқы мәтінді жібер.
 
 Мысалы:
 
-«Сенің айтқаның қызық екен. Әсіресе ... деген жеріңе қосыламын.»
+Құрғақ:
+«Жақсы, түсіндім.»
 
-Сосын өз ойыңды қос.
+Табиғи:
+«Жақсы 😊 Түсіндім. Айтқаныңа рақмет.»
 
-Оған маңызды болған нәрсеге нақты реакция білдірсең, ол өзін тыңдап отырғаныңды сезеді.
-`;
-}
+Жылы:
+«Жақсы екен 😊 Сенің айтқаныңды түсіндім.»
 
+Еркін:
+«Ооо, түсінікті 😄 Қызық екен.»
 
-/* 22. Қысқа жауап */
-if(
-    q.includes("қысқа жауап") ||
-    q.includes("қысқа жазады") ||
-    q.includes("бір сөзбен")
-){
-    return `
-Егер ол үнемі қысқа жауап берсе, бірнеше себеп болуы мүмкін.
+Нақты мәтінді жіберсең, мағынасын өзгертпей бірнеше нұсқа жасап беремін.`;
 
-Мүмкін:
-• қазір көңіл-күйі жоқ;
-• бос емес;
-• сөйлесуге қызығушылығы аз;
-• немесе жай ғана қысқа жазатын адам.
-
-Бірнеше хабарламасына қарап бірден қорытынды жасама.
-
-Әңгімені басқа тақырыпқа ауыстырып көр.
-`;
-}
+    }
 
 
-/* 23. Қызықпайды ма */
-if(
-    q.includes("қызықпайды ма") ||
-    q.includes("маған қызықпай") ||
-    q.includes("маған қызығушылығы жоқ")
-){
-    return `
-Бір ғана хабарламаға қарап оның саған қызығатынын немесе қызықпайтынын нақты анықтау қиын.
+    /* 6 */
 
-Жалпы қарым-қатынасына қара:
+    if(
+        q.includes("бірнеше нұсқа") ||
+        q.includes("нұсқалар") ||
+        q.includes("3 жауап") ||
+        q.includes("5 жауап")
+    ){
 
-• өзі бірінші болып жаза ма?
-• саған сұрақ қоя ма?
-• әңгімені жалғастыруға тырыса ма?
-• сенің айтқандарыңды есте сақтай ма?
+        return `Әрине. Бір хабарламаға әртүрлі стильде жауап беруге болады:
 
-Ең дұрысы — асығыс қорытынды жасамау және оның әрекетін уақыт өте бақылау.
-`;
-}
+🙂 Қарапайым:
+«Иә, түсіндім 😊»
+
+😄 Еркін:
+«Ооо, қызық екен 😄»
+
+💬 Әңгіме жалғастыратын:
+«Қызық екен. Өзіңе қалай ұнады?»
+
+✨ Жылы:
+«Жақсы екен 😊 Сенің айтқаның қызық болып тұр.»
+
+😂 Әзілмен:
+«Осы жері қызық болып кетті ғой 😂»
+
+Нақты хабарламаны жіберсең, дәл сол жағдайға бірнеше жауап жасап беремін.`;
+
+    }
 
 
-/* 24. Бірінші кездесуге */
-if(
-    q.includes("бірінші кездесу") ||
-    q.includes("алғашқы кездесу") ||
-    q.includes("кездесуге")
-){
-    return `
-Бірінші кездесуде ең маңыздысы — өзіңді басқа адам сияқты көрсетуге тырыспау.
+    /* 7 */
 
-Сөйлесуге болатын тақырыптар:
+    if(
+        q.includes("сәлем") ||
+        q.includes("салам") ||
+        q === "hello" ||
+        q === "hi"
+    ){
 
-• хобби;
-• музыка;
-• фильм;
-• оқу немесе жұмыс;
-• саяхат;
-• қызығушылықтар;
-• болашақтағы мақсаттар.
+        return `Сәлем! 🤍
+
+Мен ARUZHAN AI.
+
+Маған кез келген жағдайды жаза аласың.
 
 Мысалы:
+
+«Ол маған осылай жазды, не деп жауап беремін?»
+
+«Бірінші болып не жазсам болады?»
+
+«Әңгіме тоқтап қалды, не істеймін?»
+
+«Оның хабарламасы нені білдіреді?»
+
+Жағдайыңды толық жаз — көмектесуге тырысамын 😊`;
+
+    }
+
+
+    /* 8 */
+
+    if(
+        q.includes("рахмет") ||
+        q.includes("рақмет")
+    ){
+
+        return `Әрқашан көмектесуге дайынмын 🤍
+
+Тағы бір сұрағың болса, жаза бер.
+
+Қызбен сөйлесу, хабарламаға жауап беру, әңгіме бастау немесе әңгімені жалғастыру бойынша көмектесе аламын.`;
+
+    }
+
+
+    /* 9 */
+
+    if(
+        q.includes("қалайсың") ||
+        q.includes("каласын")
+    ){
+
+        return `Жақсымын 😊 Рақмет!
+
+Ал сенің жағдайың қалай?
+
+Егер біреумен сөйлесуге байланысты мәселе болса, жағдайды жаза бер. Бірге ойланып көрейік.`;
+
+    }
+
+
+    /* 10 */
+
+    if(
+        q.includes("ұнайды") ||
+        q.includes("ұнатамын") ||
+        q.includes("ұнайтын")
+    ){
+
+        return `Егер бір адам саған ұнайтын болса, бірден тым қатты сезім білдіруге асықпаған дұрыс.
+
+Алдымен қарапайым сөйлесіп, ортақ қызығушылықтарды анықтауға болады.
+
+Мысалы:
+
+«Соңғы кезде неге қызығып жүрсің?»
+
 «Бос уақытыңда не істегенді ұнатасың?»
 
-«Қай жерге саяхаттап барғың келеді?»
+«Қандай музыка ұнайды?»
 
-«Соңғы кезде сені не қызықтырып жүр?»
+Ең маңыздысы — өзіңді басқа адам ретінде көрсетуге тырыспау.`;
 
-Әңгіме сұрақ-жауап сияқты болып кетпес үшін өзің де жауаптарыңды бөліс.
-`;
-}
+    }
 
 
-/* 25. Кездесуге шақыру */
-if(
-    q.includes("кездесуге шақыр") ||
-    q.includes("кездесуге қалай") ||
-    q.includes("қалай шақырам")
-){
-    return `
-Кездесуге шақырғанда тым күрделі сөздердің қажеті жоқ.
+    /* 11 */
+
+    if(
+        q.includes("жауап бермей") ||
+        q.includes("жауап жоқ") ||
+        q.includes("оқып қойды")
+    ){
+
+        return `Егер ол жауап бермей жатса, бірден бірнеше хабарлама қатарынан жібере бермеген дұрыс.
+
+Оған уақыт бер.
+
+Егер кейін жазғың келсе, қысым жасамай қарапайым түрде:
+
+«Қалайсың? Күнің жақсы өтіп жатыр ма? 😊»
+
+деп жазуға болады.
+
+Ең бастысы — оның жеке кеңістігін құрметтеу.`;
+
+    }
+
+
+    /* 12 */
+
+    if(
+        q.includes("ренжіп") ||
+        q.includes("ренжіді") ||
+        q.includes("ашуланды")
+    ){
+
+        return `Егер ол ренжіген сияқты көрінсе, алдымен жағдайды түсінуге тырыс.
+
+Мысалы:
+
+«Егер менің сөзім саған дұрыс жетпесе, кешір. Менің ондай ниетім болған жоқ.»
+
+Немесе:
+
+«Сенің көңіліңе тиген болса, кешір. Не нәрсе ұнамағанын айтсаң, түсінуге тырысамын.»
+
+Ең дұрысы — ақталмай тұрып, алдымен оның сезімін тыңдау.`;
+
+    }
+
+
+    /* 13 */
+
+    if(
+        q.includes("кездесуге") ||
+        q.includes("кездесуге шақыр")
+    ){
+
+        return `Кездесуге шақырғанда қысым жасамай, қарапайым ұсынған дұрыс.
 
 Мысалы:
 
 «Бір күні кофе ішіп, сөйлесіп отырсақ қалай қарайсың? 😊»
 
-«Сенімен сөйлескен қызық екен. Бір күні кездесіп, әңгімелесіп отырсақ қалай?»
+Немесе:
 
-«Осы аптада бос уақытың болса, бірге бір жерге барып қайтсақ қалай?»
+«Бос уақытың болса, бір күні кездесіп, сөйлесіп қайтсақ қалай?»
 
-Ең бастысы — ұсынысты қысым жасамай айту және оның жауабын құрметтеу.
-`;
-}
+Егер ол келіспесе, оны құрметпен қабылдаған дұрыс.`;
 
-
-/* 26. Комплимент */
-if(
-    q.includes("комплимент") ||
-    q.includes("мақтау") ||
-    q.includes("әдемі деп")
-){
-    return `
-Комплимент табиғи әрі шынайы болғаны жақсы.
-
-Мысалы:
-
-«Сенімен сөйлескен қызық екен.»
-
-«Сенің ойлау стилің ұнайды.»
-
-«Әзілдерің қызық екен 😄»
-
-«Сенің бір нәрсені түсіндіру тәсілің ерекше екен.»
-
-Тек сыртқы келбетке ғана емес, оның мінезіне, ойына немесе қызығушылығына да комплимент айтуға болады.
-`;
-}
+    }
 
 
-/* 27. Әдемі қыз */
-if(
-    q.includes("әдемі қыз") ||
-    q.includes("өте әдемі")
-){
-    return `
-Егер біреуге сыртқы келбетіне комплимент айтқың келсе, қарапайым болғаны жақсы.
+    /* 14 */
+
+    if(
+        q.includes("әзіл") ||
+        q.includes("күлдір")
+    ){
+
+        return `Әзіл айтқанда адамның көңіл-күйін және әңгіменің контекстін ескер.
 
 Мысалы:
 
-«Сен өте әдемі екенсің 😊»
-
-Сәл табиғи түрде:
-
-«Айтпақшы, сенің күлкің әдемі екен.»
+«Бүгінгі күнің қалай өтті? 10 балдық жүйемен бағаласақ, қанша қояр едің? 😄»
 
 Немесе:
 
-«Сенің стилің ұнайды екен.»
+«Бүгін шаршағаның сонша, Wi-Fi сияқтысың: барсың, бірақ байланыс әлсіз 😂»
 
-Комплиментті шынайы айт және тым көп қайталай берме.
-`;
-}
+Әзіл табиғи болғаны жақсы.`;
 
-
-/* 28. Әзіл */
-if(
-    q.includes("әзіл") ||
-    q.includes("күлдір") ||
-    q.includes("қызық қыл")
-){
-    return `
-Әзіл айтқанда оның да әзілді қалай қабылдайтынын ескер.
-
-Қарапайым мысал:
-
-«Бүгін сондай шаршадым, тіпті телефоным да мені зарядтауға қою керек сияқты 😄»
-
-Немесе әңгімені ойынға айналдыруға болады:
-
-«Бір-бірімізге үш кездейсоқ сұрақ қоямыз ба? 😄»
-
-Ең бастысы — әзіл табиғи болсын және басқа адамды ренжітпесін.
-`;
-}
+    }
 
 
-/* 29. Қызғаныш */
-if(
-    q.includes("қызғанып") ||
-    q.includes("қызғаныш") ||
-    q.includes("басқа жігіт")
-){
-    return `
-Егер қызғаныш сезімі болса, бірден айыптау немесе қысым жасау дұрыс емес.
+    /* 15 */
 
-Алдымен жағдайды түсінуге тырыс.
+    if(
+        q.includes("таңертең") ||
+        q.includes("қайырлы таң")
+    ){
 
-Егер қарым-қатынас маңызды болса, сабырлы түрде:
-«Мүмкін мен қате түсініп тұрған шығармын, бірақ осы жағдай мені сәл алаңдатып тұр»
-деп өз сезіміңді айтуға болады.
+        return `Таңертең жазуға болатын табиғи нұсқалар:
 
-Сенім мен ашық сөйлесу кез келген қарым-қатынаста маңызды.
-`;
-}
+☀️ «Қайырлы таң 😊 Күнің сәтті өтсін!»
+
+🙂 «Қайырлы таң! Бүгін көңіл-күйің қалай?»
+
+✨ «Қайырлы таң 😊 Бүгінгі күнің жақсы жаңалықтарға толы болсын.»
+
+Қысқа әрі шынайы болғаны жақсы.`;
+
+    }
 
 
-/* 30. Ренжітіп алдым */
-if(
-    q.includes("ренжітіп алдым") ||
-    q.includes("ренжітіп қойдым") ||
-    q.includes("ренжіді")
-){
-    return `
-Егер оны ренжітіп алған болсаң, ақталудан бұрын оның сезімін түсінуге тырыс.
+    /* 16 */
 
-Мысалы:
+    if(
+        q.includes("қайырлы түн") ||
+        q.includes("ұйықта")
+    ){
 
-«Менің сөзім сені ренжіткенін түсіндім. Кешірші. Ондай ниетім болмаған.»
+        return `Қайырлы түн деп қарапайым жазуға болады:
+
+«Қайырлы түн 😊 Жақсы демал.»
 
 Немесе:
 
-«Мен дұрыс айтпаған шығармын. Сені ренжітіп алған болсам, кешір.»
+«Жақсы ұйықта 😊 Ертеңгі күнің сәтті өтсін.»
 
-Кешірім сұрағанда кінәні басқа адамға аудармай, өз әрекетіңе жауап берген дұрыс.
-`;
-}
+Егер араларың жақын болса:
 
+«Қайырлы түн 😊 Жақсы демал, ертең сөйлесерміз.»`;
 
-/* 31. Ұрысып қалдық */
-if(
-    q.includes("ұрысып қалдық") ||
-    q.includes("ұрысып қалдым") ||
-    q.includes("ұрысып")
-){
-    return `
-Ұрыстан кейін бірден эмоциямен ұзақ хабарлама жазбаған дұрыс.
-
-Алдымен тынышталып ал.
-
-Содан кейін:
-
-«Бүгінгі жағдай үшін өкініп тұрмын. Сенімен тыныш сөйлескім келеді.»
-
-немесе
-
-«Екеуіміз де эмоцияға беріліп кеттік сияқты. Сабырмен сөйлесіп алсақ қалай?»
-
-Ең бастысы — кімнің кінәлі екенін дәлелдеуден бұрын мәселені шешуге тырысу.
-`;
-}
+    }
 
 
-/* 32. Не туралы сөйлесем */
-if(
-    q.includes("не туралы сөйлесем") ||
-    q.includes("тақырып тап") ||
-    q.includes("тақырып жоқ")
-){
-    return `
-Мына тақырыптарды қолдануға болады:
+    /* 17 */
 
-🎵 Музыка
-🎬 Фильмдер
-✈️ Саяхат
-🍕 Сүйікті тағам
-🎮 Ойындар
-📚 Оқу
-💻 Технология
-🌍 Армандар
-😄 Күлкілі оқиғалар
-🎯 Мақсаттар
-🏆 Жетістіктер
-🐶 Үй жануарлары
-☀️ Күнделікті өмір
+    if(
+        q.includes("комплимент") ||
+        q.includes("мақтау")
+    ){
 
-Мысалы:
-«Егер қазір кез келген елге билет берсе, қайда ұшар едің?»
-
-Осындай ашық сұрақтар әңгімені жақсы жалғастырады.
-`;
-}
-
-
-/* 33. Қызықты сұрақтар */
-if(
-    q.includes("қызықты сұрақтар") ||
-    q.includes("қызық сұрақтар")
-){
-    return `
-Мына сұрақтарды қойып көр:
-
-1. «Қазір бір арманды орындауға мүмкіндік берсе, қайсысын таңдар едің?»
-
-2. «Саған бір күнге кез келген жерге бару мүмкіндігі берілсе, қайда барар едің?»
-
-3. «Балалық шағыңдағы ең қызық естелігің қандай?»
-
-4. «Адамдар сен туралы нені жиі қате түсінеді?»
-
-5. «Қандай нәрсе сені бірден қуантады?»
-
-6. «Өзің туралы көп адам білмейтін бір қызық факт бар ма?»
-
-7. «Соңғы кезде сені не шабыттандырып жүр?»
-`;
-}
-
-
-/* 34. Сүйіспеншілік */
-if(
-    q.includes("сүйемін") ||
-    q.includes("жақсы көремін") ||
-    q.includes("махаббат")
-){
-    return `
-Сезім туралы сөз болғанда ең маңыздысы — шынайылық.
-
-Егер біреуге сезіміңді жеткізгің келсе:
-
-«Сенімен сөйлескен сайын өзімді жақсы сезінемін.»
-
-«Сенің жаныңда өзімді еркін сезінемін.»
-
-«Сен мен үшін ерекше адам болып бара жатырсың.»
-
-Егер сезіміңді нақты білмесең, асықпай, қарым-қатынасты табиғи түрде дамытқан дұрыс.
-`;
-}
-
-
-/* 35. Сені ұнатамын */
-if(
-    q.includes("сені ұнатамын") ||
-    q.includes("ұнататынымды") ||
-    q.includes("ұнайсың")
-){
-    return `
-Егер біреуге ұнайтынын айтқың келсе, тым күрделі сөздердің қажеті жоқ.
+        return `Комплимент шынайы және нақты болғаны жақсы.
 
 Мысалы:
 
-«Шынымды айтсам, сен маған ұнайсың.»
+«Сенің сөйлегенің қызық екен.»
 
-«Сенімен сөйлескен сайын саған деген қызығушылығым артып келе жатқанын байқадым.»
+«Сенің юморың ұнайды 😄»
 
-«Сен мен үшін ерекше адам болып бара жатырсың.»
+«Сенің ойлау тәсілің ерекше екен.»
 
-Ең бастысы — жауапты талап етпеу және оның сезімін құрметтеу.
-`;
-}
+«Сенімен сөйлескенде уақыттың қалай өткенін байқамай қалады екенсің.»
 
+Тек сыртқы келбетке ғана емес, адамның мінезіне немесе қызығушылығына да назар аударуға болады.`;
 
-/* 36. Оқудасың ба */
-if(
-    q.includes("оқудасың ба") ||
-    q.includes("қайда оқисың") ||
-    q.includes("не оқып жүрсің")
-){
-    return `
-Егер оқу туралы сұраса:
-
-«Мен ... оқимын. Ал өзің ше?»
-
-«Қазір ... бағытында оқып жүрмін. Саған өзіңнің оқуың ұнай ма?»
-
-«Оқуым жаман емес, кейде қиындықтары болады 😄 Ал сенде қалай?»
-
-Өзің туралы қысқаша айтып, кейін оған сұрақ қойған дұрыс.
-`;
-}
+    }
 
 
-/* 37. Жұмыс */
-if(
-    q.includes("жұмыс істейсің бе") ||
-    q.includes("қайда жұмыс") ||
-    q.includes("жұмыс")
-){
-    return `
-Жұмыс туралы әңгімені былай жалғастыруға болады:
+    /* 18 */
 
-«Иә, ... саласында жұмыс істеймін. Өзің немен айналысасың?»
+    if(
+        q.includes("қызған") ||
+        q.includes("қызғаныш")
+    ){
 
-«Қазір оқумен айналысып жүрмін. Болашақта ... саласында жұмыс істегім келеді.»
+        return `Қызғаныш туралы бірден қорытынды жасамаған дұрыс.
 
-«Жұмысым кейде қиын, бірақ қызық. Саған өз жұмысың ұнай ма?»
-`;
-}
-
-
-/* 38. Қай қала */
-if(
-    q.includes("қай қала") ||
-    q.includes("қай жақтансың") ||
-    q.includes("қай жерденсің")
-){
-    return `
-Қарапайым жауап:
-
-«Мен ... қаласынанмын. Ал өзің қай жақтансың?»
-
-Егер бір қалада тұрсаңдар:
-
-«Ооо, біз бір қалада екенбіз ғой 😄 Қаланың қай жағын ұнатасың?»
-
-Бұл ортақ тақырып табуға жақсы мүмкіндік.
-`;
-}
-
-
-/* 39. Саяхат */
-if(
-    q.includes("саяхат") ||
-    q.includes("саяхаттағанды") ||
-    q.includes("қайда барғың")
-){
-    return `
-Саяхат туралы сұрақтар:
-
-«Қай елге барғың келеді?»
-
-«Арманыңдағы саяхат қандай?»
-
-«Теңізді ұнатасың ба, әлде тауды ма?»
-
-«Егер қазір билет дайын болса, қайда ұшар едің?»
-
-Оның жауабынан кейін өз арманыңды да айтып бер.
-`;
-}
-
-
-/* 40. Арман */
-if(
-    q.includes("арманың") ||
-    q.includes("арманың қандай") ||
-    q.includes("мақсатың")
-){
-    return `
-Бұл тақырып әңгімені тереңдетуге көмектеседі.
+Егер бір жағдай саған түсініксіз болса, ашық әрі сабырлы түрде сөйлескен дұрыс.
 
 Мысалы:
 
-«Болашақта неге қол жеткізгің келеді?»
+«Мен бір нәрсені дұрыс түсінбей қалған сияқтымын. Осы жағдайды түсіндіріп бере аласың ба?»
 
-«Қазір ең үлкен мақсатың қандай?»
+Сабырлы әңгіме көбіне болжам жасағаннан жақсы.`;
 
-«Егер ешқандай шектеу болмаса, не істер едің?»
-
-Өзің де жауап беріп, тек сұрақ қоя берме. Сонда әңгіме екі жақты болады.
-`;
-}
+    }
 
 
-/* 41. Instagram */
-if(
-    q.includes("инстаграм") ||
-    q.includes("instagram")
-){
-    return `
-Егер әлеуметтік желі туралы сұрағың болса, оны әңгіме бастауға қолдануға болады.
+    /* 19 */
 
-Мысалы:
+    if(
+        q.includes("ұял") ||
+        q.includes("ұяламын")
+    ){
 
-«Инстаграмда қандай контент көргенді ұнатасың?»
+        return `Ұялу — қалыпты нәрсе 😊
 
-«Сен көбіне қандай парақшаларға жазылғансың?»
-
-«Инстадағы соңғы көрген қызық видеоң қандай?»
-
-Бірақ жеке ақпаратты талап етпей, адамның шекарасын құрметтеген дұрыс.
-`;
-}
-
-
-/* 42. Телефон нөмірі */
-if(
-    q.includes("номерін сұра") ||
-    q.includes("нөмірін сұра") ||
-    q.includes("телефон нөмірі")
-){
-    return `
-Телефон нөмірін сұрағанда қысым жасамаған дұрыс.
-
-Мысалы:
-
-«Егер қарсы болмасаң, WhatsApp-та сөйлесіп тұру үшін нөміріңді алсам бола ма?»
-
-немесе
-
-«Осы жерде сөйлескен ыңғайлы ма, әлде WhatsApp-қа ауысайық па?»
-
-Егер қаламаса, оны қалыпты қабылдаған дұрыс.
-`;
-}
-
-
-/* 43. Бірге қыдыру */
-if(
-    q.includes("бірге қыдыру") ||
-    q.includes("бірге шығу") ||
-    q.includes("қыдыруға")
-){
-    return `
-Ұсынысты нақты әрі қарапайым айтқан жақсы.
-
-Мысалы:
-
-«Осы демалыста бос болсаң, бірге серуендеп қайтсақ қалай?»
-
-«Бір күні кофе ішіп, сөйлесіп отырсақ қалай қарайсың?»
-
-«Қалада жаңа бір жер тауып, барып көрейік пе?»
-
-Ең бастысы — оның жауабын құрметтеу.
-`;
-}
-
-
-/* 44. Ұялшақпын */
-if(
-    q.includes("ұяламын") ||
-    q.includes("ұялшақпын") ||
-    q.includes("қорқамын жазуға")
-){
-    return `
-Ұялу — қалыпты нәрсе.
-
-Бірден ерекше немесе мінсіз хабарлама жазуға тырыспа.
+Бірден ерекше немесе мінсіз хабарлама жазу міндетті емес.
 
 Қарапайым баста:
 
 «Сәлем 😊 Қалайсың?»
 
-немесе ортақ тақырыптан баста.
+Егер әңгіме жүріп кетсе, кейін ортақ қызығушылықтар туралы сөйлесуге болады.
 
-Ең маңыздысы — мінсіз сөз табу емес, табиғи қарым-қатынас бастау.
-`;
-}
+Ең бастысы — өзіңді тым қатты сынама.`;
 
-
-/* 45. Не деп жазам */
-if(
-    q.includes("не деп жазам") ||
-    q.includes("не деп жазайын") ||
-    q.includes("қалай жазам")
-){
-    return `
-Маған нақты жағдайды жазсаң, көмектесемін.
-
-Мысалы:
-
-«Мен оған ... деп жаздым.»
-
-«Ол маған ... деп жауап берді.»
-
-«Енді не деп жауап берсем болады?»
-
-Сонда мен саған бірнеше нұсқа ұсынамын:
-
-🙂 қарапайым;
-😄 әзілмен;
-💬 әңгімені жалғастыратын;
-🤍 жылы;
-✨ қызықты.
-
-Жағдайды толық жазып көр.
-`;
-}
+    }
 
 
-/* 46. Дауыс хабарлама */
-if(
-    q.includes("голос") ||
-    q.includes("дауыс") ||
-    q.includes("аудио")
-){
-    return `
-Егер дауыс хабарлама жібергің келсе, тым ұзақ қылмаған дұрыс.
+    /* 20 */
 
-Алдымен:
-«Бір нәрсе айтып жіберейін 😄»
-деп бастауға болады.
+    if(
+        q.includes("дос бол") ||
+        q.includes("достас")
+    ){
 
-Ең маңыздысы — дауысыңды табиғи ұста. Арнайы басқа адам сияқты сөйлеуге тырыспа.
-`;
-}
+        return `Достық қарым-қатынасты табиғи түрде дамытуға болады.
 
+Ортақ қызығушылықтар туралы сөйлес:
 
-/* 47. Эмодзи */
-if(
-    q.includes("эмодзи") ||
-    q.includes("смайлик")
-){
-    return `
-Эмодзи әңгіменің көңіл-күйін жеткізуге көмектеседі.
+🎵 Музыка
 
-🙂 — жылы, қарапайым
-😄 — көңілді
-😂 — әзіл
-😊 — жұмсақ, жылы
-🤍 — жылы сезім
-😉 — ойнақы көңіл-күй
+🎬 Фильмдер
 
-Бірақ тым көп қолданудың қажеті жоқ. Бір-екі эмодзи жеткілікті.
-`;
-}
+🎮 Ойындар
+
+📚 Оқу
+
+🏀 Спорт
+
+✈️ Саяхат
+
+Ең бастысы — тек өзің туралы айта бермей, оның да ойын тыңдау.`;
+
+    }
 
 
-/* 48. Құрғақ жауап */
-if(
-    q.includes("құрғақ жауап") ||
-    q.includes("құрғақ жазып")
-){
-    return `
-Құрғақ жауапты табиғи ету үшін үш нәрсе қос:
+    /* 21 */
 
-1. Оның айтқанына реакция.
-2. Өз ойың.
-3. Әңгімені жалғастыратын сұрақ.
+    if(
+        q.includes("ghost") ||
+        q.includes("игнор") ||
+        q.includes("игнорит")
+    ){
+
+        return `Егер адам жауап бермей немесе алыстап кеткендей көрінсе, бірнеше себеп болуы мүмкін.
+
+Ол:
+• бос емес болуы мүмкін;
+• сөйлесуге көңіл-күйі болмауы мүмкін;
+• не жазарын білмеуі мүмкін;
+• немесе әңгімені жалғастырғысы келмеуі мүмкін.
+
+Нақты себебін бірден білу мүмкін емес.
+
+Сондықтан қысым жасамай, оған уақыт берген дұрыс.`;
+
+    }
+
+
+    /* 22 */
+
+    if(
+        q.includes("қызықты") ||
+        q.includes("қызық тақырып")
+    ){
+
+        return `Әңгімеге қызықты тақырыптар:
+
+🎵 Соңғы тыңдаған ән
+
+🎬 Ұнайтын фильм
+
+✈️ Армандаған саяхат
+
+🍕 Сүйікті тағам
+
+🎮 Ойындар
+
+📚 Қызығатын нәрселер
+
+🌍 Барғысы келетін ел
+
+💭 Балалық шақтағы қызық оқиға
 
 Мысалы:
 
-Құрғақ:
-«Жақсы.»
+«Егер қазір ұшаққа отырып, кез келген елге бара алсаң, қайда барар едің?»`;
 
-Табиғи:
-«Жақсы екен 😊 Мен де осындай нәрсені ұнатамын. Өзің бұған қашаннан бері қызығасың?»
-`;
-}
+    }
 
 
-/* 49. Әңгіме бастау */
-if(
-    q.includes("әңгіме бастау") ||
-    q.includes("сөйлесуді бастау")
-){
-    return `
-Әңгіме бастау үшін:
+    /* 23 */
 
-«Сәлем 😊 Бүгінгі күнің қалай өтіп жатыр?»
+    if(
+        q.includes("жазбай") ||
+        q.includes("бірінші жазбай")
+    ){
 
-«Саған бір қызық сұрақ қойсам бола ма? 😄»
+        return `Егер үнемі бірінші болып сен жазатын болсаң, біраз уақыт өзің бастамай көріп, оның өзі байланысқа шығатынын байқауға болады.
 
-«Соңғы кезде қандай музыка тыңдап жүрсің?»
+Бірақ бір ғана жағдайға қарап қорытынды жасама.
 
-«Бүгін бір қызық нәрсе болды ма?»
+Адамның бос уақыты, мінезі және қарым-қатынас стилі әртүрлі болуы мүмкін.`;
 
-«Егер қазір кез келген жерге бара алсаң, қайда барар едің?»
-
-Қарапайым сұрақтан бастап, оның жауабына қарай әңгімені дамыт.
-`;
-}
+    }
 
 
-/* 50. Қарым-қатынас туралы */
-if(
-    q.includes("қарым қатынас") ||
-    q.includes("қарым-қатынас") ||
-    q.includes("қатынас")
-){
-    return `
-Жақсы қарым-қатынастың негізі:
+    /* 24 */
 
-• өзара құрмет;
-• сенім;
-• ашық сөйлесу;
-• жеке шекараны түсіну;
-• бір-бірін тыңдау;
-• қысым жасамау.
+    if(
+        q.includes("флирт") ||
+        q.includes("флирт жасау")
+    ){
 
-Біреуге ұнау үшін өзіңді толық өзгертуге тырыспа. Сау қарым-қатынаста екі адам да өзін еркін сезінуі керек.
-`;
-}
-
-
-/* 51. Сен кімсің */
-if(
-    q.includes("сен кімсің") ||
-    q.includes("сен қандай ии") ||
-    q.includes("сен не істей аласың")
-){
-    return `
-Мен — ARUZHAN AI 🤍
-
-Менің негізгі мақсатым — адамдарға қарым-қатынас кезінде өз ойын дұрыс жеткізуге көмектесу.
-
-Мен саған:
-
-💬 хабарламаға жауап ойластыруға;
-✨ әңгіме бастауға;
-😄 қызықты сұрақ табуға;
-❤️ мәтінді жылы әрі табиғи етуге;
-🤔 хабарламаның мағынасын түсіндіруге;
-📝 бірнеше жауап нұсқасын ұсынуға;
-💡 қарым-қатынас туралы жалпы кеңес беруге көмектесе аламын.
-
-Жағдайыңды жаз — бірге қарап шығайық.
-`;
-}
-
-
-/* 52. Рақмет AI */
-if(
-    q.includes("саған рахмет") ||
-    q.includes("саған рақмет") ||
-    q.includes("көмегіңе рақмет")
-){
-    return `
-Әрқашан көмектесуге дайынмын 😊🤍
-
-Егер тағы бір жағдай болса, жаза бер.
-Хабарламаны толық жіберсең, оны бірге талдап, ең табиғи жауапты табуға көмектесемін.
-`;
-}
-
-
-/* 53. Көмектес */
-if(
-    q.includes("көмектесші") ||
-    q.includes("көмек керек") ||
-    q.includes("көмектесе аласың")
-){
-    return `
-Әрине, көмектесемін 🤍
-
-Маған жағдайды мүмкіндігінше нақты жаз.
+        return `Флирт табиғи әрі құрметті болғаны жақсы.
 
 Мысалы:
 
-«Мен оған ... деп жаздым.»
+«Сенімен сөйлескен қызық екен 😊»
 
-«Ол ... деп жауап берді.»
+«Сенің әзілдерің ұнайды 😄»
 
-«Мен енді не жазарымды білмей тұрмын.»
+«Бір қызығы, сенімен сөйлескен сайын жаңа нәрсе біліп жатырмын.»
 
-Мен жағдайды қарап, саған бірнеше нұсқа ұсынамын.
-`;
-}
+Артық қысым жасамай, адамның реакциясына қарап сөйлескен дұрыс.`;
 
-
-/* 54. Ол онлайн */
-if(
-    q.includes("онлайн") ||
-    q.includes("желіде отыр")
-){
-    return `
-Егер ол онлайн болып, бірақ саған жауап бермесе, бірден қорытынды жасама.
-
-Онлайн болу — міндетті түрде сөйлесуге дайын деген сөз емес.
-
-Бірнеше рет қатарынан хабарлама жібермей, оған уақыт берген дұрыс.
-`;
-}
+    }
 
 
-/* 55. Жауапты қалай жалғастыру */
-if(
-    q.includes("жауапты жалғастыр") ||
-    q.includes("әңгімені жалғастыр")
-){
-    return `
-Әңгімені жалғастырудың ең жақсы тәсілі — оның соңғы айтқан сөзіне сүйену.
+    /* 25 */
 
-Мысалы:
+    if(
+        q.includes("сенімді") ||
+        q.includes("өзіне сенім")
+    ){
 
-Ол: «Бүгін достарыммен кездестім.»
+        return `Өзіңе сенімді болу — мінсіз болу деген сөз емес.
 
-Сен:
-«Ооо, жақсы екен 😄 Қайда бардыңдар?»
+Сөйлескенде:
 
-Ол: «Киноға бардық.»
+• асықпа;
+• өз ойыңды анық айт;
+• басқа адамды тыңда;
+• өзіңді басқа адам ретінде көрсетпе.
 
-Сен:
-«Қандай фильм көрдіңдер? Ұнады ма?»
+Қарапайым әрі шынайы әңгіме көбіне жақсы әсер қалдырады.`;
 
-Яғни жаңа тақырыпты кездейсоқ бастамай, оның жауабынан жаңа сұрақ шығар.
-`;
-}
+    }
 
 
-/* 56. Флирт */
-if(
-    q.includes("флирт") ||
-    q.includes("еркелету") ||
-    q.includes("ойнақы")
-){
-    return `
-Жеңіл әрі табиғи флирт үшін:
+    /* 26 */
 
-«Сенімен сөйлесу қауіпті екен 😄 Уақыттың қалай өтіп кеткенін байқамай қаламын.»
+    if(
+        q.includes("не туралы сөйлес")
+    ){
 
-«Сенің әңгімелерің қызық екен, тағы сөйлескің келіп тұр.»
+        return `Мына тақырыптарды байқап көр:
 
-«Бір қызық нәрсе байқадым: сенімен сөйлескенде көңіл-күйім көтеріліп кетеді 😊»
-
-Ең бастысы — басқа адамның реакциясын бақылау және оның шекарасын құрметтеу.
-`;
-}
-
-
-/* 57. Ол маған бірінші жазды */
-if(
-    q.includes("өзі бірінші жазды") ||
-    q.includes("бірінші өзі жазды")
-){
-    return `
-Егер өзі бірінші болып жазса, бұл әңгімені бастауға ниеті бар екенін көрсетуі мүмкін.
-
-Жауапты тым қысқа берме.
+1. Музыка 🎵
+2. Фильм 🎬
+3. Саяхат ✈️
+4. Хобби 🎨
+5. Оқу 📚
+6. Спорт 🏀
+7. Арман 💭
+8. Балалық шақ 😊
 
 Мысалы:
 
-«Сәлем 😊 Қалайсың?»
+«Соңғы кезде өзіңе қандай жаңа нәрсе ұнап жүр?»`;
 
-немесе оның хабарламасына жауап беріп:
-
-«Ооо, қызық екен 😄 Өзің қалай ойлайсың?»
-
-Оның бастамасын қолдап, әңгімені табиғи жалғастыр.
-`;
-}
+    }
 
 
-/* 58. Көп сұрақ қояды */
-if(
-    q.includes("көп сұрақ қояды") ||
-    q.includes("маған сұрақ қоя береді")
-){
-    return `
-Егер ол саған көп сұрақ қойса, бұл әңгімені жалғастыруға қызығушылық танытып жатқанын білдіруі мүмкін.
+    /* 27 */
 
-Бірақ тек жауап беріп қана қоймай, өзің де оған сұрақ қой.
+    if(
+        q.includes("жақсы көр") ||
+        q.includes("махаббат")
+    ){
 
-Мысалы:
+        return `Сезім туралы сөйлескенде асықпай, шынайы болған дұрыс.
 
-«Мен ... ұнатамын. Ал сен ше?»
+Егер адам саған ұнайтын болса, бірден үлкен сөздер айтудың орнына алдымен оны жақынырақ тануға тырыс.
 
-Осылайша әңгіме екі жақты болады.
-`;
-}
+Шынайылық пен өзара құрмет маңызды.`;
+
+    }
 
 
-/* 59. Сұрақ қоймайды */
-if(
-    q.includes("сұрақ қоймайды") ||
-    q.includes("маған сұрақ қоймай")
-){
-    return `
-Егер ол сұрақ қоймаса, бұл міндетті түрде қызықпайды деген сөз емес.
+    /* 28 */
 
-Кейбір адамдар өздері туралы сұрақ қоюға үйренбеген болуы мүмкін.
+    if(
+        q.includes("мен туралы") ||
+        q.includes("өзің туралы")
+    ){
 
-Бірнеше рет өзің қызықты тақырып ашып көр.
-
-Егер үнемі тек сен сөйлесуге тырысып, қарсы жақ ешқандай қызығушылық танытпаса, онда оның қарым-қатынасқа деген ниетін құрметтеген дұрыс.
-`;
-}
-
-
-/* 60. Бір сөзбен жауап береді */
-if(
-    q.includes("бір сөзбен жауап") ||
-    q.includes("бір сөзбен жауап береді")
-){
-    return `
-Бір сөзбен жауап беру бірнеше нәрсені білдіруі мүмкін.
-
-Мүмкін ол:
-• бос емес;
-• шаршаған;
-• көңіл-күйі жоқ;
-• қысқа жазатын адам;
-• немесе әңгімені жалғастыруға қызықпайды.
-
-Бірнеше рет байқап көр. Әр жолы тек сен ғана әңгімені сүйреп жүрсең, өзіңді қинаудың қажеті жоқ.
-`;
-}
-
-
-/* 61. Тақырып ауыстыру */
-if(
-    q.includes("тақырыпты ауыстыр") ||
-    q.includes("тақырып ауыстыру")
-){
-    return `
-Тақырып ауыстырғың келсе, оны кенет жасамай, байланыстырып ауыстыр.
+        return `Егер сенен өзің туралы сұраса, қысқа жауап беріп қана қоймай, өзіңе қатысты қызықты бір нәрсе айт.
 
 Мысалы:
 
-«Айтпақшы, осыдан есіме түсіп кетті...»
+«Мен музыка тыңдағанды және кешке серуендегенді ұнатамын. Ал сен ше?»
 
-«Осы тақырыптан басқа бір нәрсе сұрайыншы 😄»
+Осылайша сен өзің туралы айтып, әңгімені қайта оған бағыттай аласың.`;
 
-«Айтпақшы, сенен бір нәрсе сұрайын деп едім...»
+    }
 
-Осылай ауыссаң, әңгіме табиғи көрінеді.
-`;
-}
 
+    /* 29 */
 
-/* 62. Қызықсыз болып кетті */
-if(
-    q.includes("қызықсыз") ||
-    q.includes("скучно") ||
-    q.includes("іш пысады")
-){
-    return `
-Әңгіме қызықсыз болып кетсе, стандартты сұрақтардың орнына ерекше тақырып ұсын.
+    if(
+        q.includes("қызық емес") ||
+        q.includes("скучно") ||
+        q.includes("ішім пысты")
+    ){
 
-Мысалы:
+        return `Әңгімені жеңіл әрі қызықты ету үшін ойын сияқты сұрақ қойып көр:
 
-«Бір-бірімізге кездейсоқ үш сұрақ қоямыз ба? 😄»
-
-«Егер бүгінгі күнді қайта өткізуге мүмкіндік болса, нені өзгертер едің?»
-
-«Сенің ең күтпеген жасаған әрекетің қандай?»
-
-Ойын сияқты формат әңгімені жандандыруы мүмкін.
-`;
-}
-
-
-/* 63. Ойын */
-if(
-    q.includes("ойын ойнайық") ||
-    q.includes("ойын ойнау") ||
-    q.includes("ойын ұсын")
-){
-    return `
-Чатта ойнауға болатын қарапайым ойындар:
-
-🎯 «Екі шындық, бір өтірік»
-
-🤔 «Егер таңдау керек болса...»
-
-😄 «Бір-бірімізге 5 кездейсоқ сұрақ»
-
-🎵 «Соңғы тыңдаған әніңді тап»
-
-🎬 «Фильмді эмодзимен сипаттау»
-
-Мысалы:
-«Кеттік, бір-бірімізге кезекпен 3 қызық сұрақ қоямыз 😄»
-`;
-}
-
-
-/* 64. Түсінбедім */
-if(
-    q.includes("түсінбедім") ||
-    q.includes("түсінбей тұрмын")
-){
-    return `
-Ештеңе етпейді 😊
-
-Егер біреудің хабарламасын түсінбей тұрсаң, маған оның нақты жазған сөзін жібер.
-
-Мен:
-• сөзбе-сөз мағынасын;
-• контекстін;
-• бірнеше ықтимал мағынасын;
-• қалай жауап беруге болатынын
-түсіндіріп беремін.
-`;
-}
-
-
-/* 65. Контекст */
-if(
-    q.includes("контекст") ||
-    q.includes("толық диалог")
-){
-    return `
-Әрине. Толық диалогты осында жаза аласың.
-
-Мысалы:
-
-Сен: «...»
-
-Ол: «...»
-
-Сен: «...»
-
-Ол: «...»
-
-Сонда мен әңгіменің бағытын қарап, оның жауабын контекстпен бірге талдап беремін.
-`;
-}
-
-
-/* 66. Артық жазып қойдым */
-if(
-    q.includes("артық жазып") ||
-    q.includes("көп жазып қойдым")
-){
-    return `
-Егер ұзақ хабарлама жазып қойған болсаң, қатты уайымдама.
-
-Егер айтқың келген ой түсінікті болса, бәрі жақсы.
-
-Енді үстінен тағы бірнеше хабарлама жібермей, оның жауабын күткен дұрыс.
-
-Келесі жолы ойыңды қысқа бөліктерге бөліп жазуға болады.
-`;
-}
-
-
-/* 67. Қате жаздым */
-if(
-    q.includes("қате жазып") ||
-    q.includes("дұрыс жазбадым")
-){
-    return `
-Егер хабарламада қате кетсе, қарапайым түрде түзете сал.
-
-«Кешір, дұрыс жазбай қалыппын 😄»
-
-немесе
-
-«Айтқым келгені ... еді.»
-
-Қатты уайымдаудың қажеті жоқ. Кішкентай қате қалыпты нәрсе.
-`;
-}
-
-
-/* 68. Жауап беруге ұяламын */
-if(
-    q.includes("жауап беруге ұяламын") ||
-    q.includes("жауап жазуға қорқамын")
-){
-    return `
-Мінсіз жауап жазу міндетті емес.
-
-Қарапайым, шынайы жауап көбіне жақсырақ әсер қалдырады.
-
-Егер нақты хабарламаны жіберсең, мен оны бірнеше стильде құрастырып бере аламын.
-
-Мысалы:
-🙂 қарапайым
-😄 көңілді
-💬 еркін
-🤍 жылы
-✨ қызықты
-`;
-}
-
-
-/* 69. Қалай ұнаймын */
-if(
-    q.includes("қалай ұнаймын") ||
-    q.includes("қалай ұнауға")
-){
-    return `
-Біреуге ұнаудың ең дұрыс жолы — өзіңді басқа адам етіп көрсету емес.
-
-• шынайы бол;
-• тыңдай біл;
-• құрмет көрсет;
-• өзің туралы да ашық айт;
-• оның қызығушылықтарына мән бер;
-• қысым жасама.
-
-Жақсы қарым-қатынас екі жақтың да еркін әрі жайлы болуынан басталады.
-`;
-}
-
-
-/* 70. Не жазсам қызығады */
-if(
-    q.includes("қызығатын") ||
-    q.includes("қызықтырып жаз")
-){
-    return `
-Адамды қызықтыру үшін арнайы «сиқырлы» сөз жоқ.
-
-Оның өзіне қызық болатын тақырып тап.
-
-Мысалы:
-
-«Сен туралы бір нәрсе сұрайыншы: адамдар сенің қандай қасиетіңді жиі байқамайды?»
-
-«Саған қазір бір мүмкіндік берсе, не істер едің?»
-
-«Соңғы кезде сені қатты қуантқан нәрсе не?»
-
-Ең жақсы әңгіме — шынайы қызығушылықтан басталады.
-`;
-}
-
-
-/* 71. Жауапты тексер */
-if(
-    q.includes("жауабымды тексер") ||
-    q.includes("дұрыс па") ||
-    q.includes("осылай жазсам")
-){
-    return `
-Әрине. Жазғың келген хабарламаны осында жібер.
-
-Мен оны:
-
-• табиғи ма;
-• тым ресми ме;
-• тым құрғақ па;
-• түсінікті ме;
-• әңгімені жалғастыруға мүмкіндік бере ме
-
-деген жағынан қарап, қажет болса бірнеше жақсырақ нұсқасын ұсынамын.
-`;
-}
-
-
-/* 72. Бірнеше стиль */
-if(
-    q.includes("стиль") ||
-    q.includes("әртүрлі стиль")
-){
-    return `
-Бір хабарламаны бірнеше стильде жасап бере аламын:
-
-🙂 Қарапайым
-
-😄 Көңілді
-
-✨ Қызықты
-
-🤍 Жылы
-
-💬 Еркін
-
-😉 Ойнақы
-
-Нақты хабарламаны жіберсең, әр стильге жеке нұсқа жасап беремін.
-`;
-}
-
-
-/* 73. Кеш жауап */
-if(
-    q.includes("кеш жауап") ||
-    q.includes("кеш жауап берді") ||
-    q.includes("кеш жауап бердім")
-){
-    return `
-Егер ол кеш жауап берсе, бірден ренжудің қажеті жоқ.
-
-Мүмкін оның шаруасы болған шығар.
-
-Жай ғана әңгімені жалғастыра бер:
-
-«Ештеңе етпейді 😊 Күнің қалай өтті?»
-
-Егер сен өзің кеш жауап берсең:
-
-«Кешір, жауап бере алмай қалдым. Бүгін біраз шаруамен жүрдім.»
-
-Шынайы әрі қысқа түсініктеме жеткілікті.
-`;
-}
-
-
-/* 74. Елемей жүр */
-if(
-    q.includes("елемей жүр") ||
-    q.includes("мені елемейді")
-){
-    return `
-Егер өзіңді еленбей жүргендей сезінсең, алдымен нақты жағдайға қара.
-
-Бір-екі рет жауап бермеу — міндетті түрде елемеу емес.
-
-Ал егер ұзақ уақыт бойы тек сен байланысқа шығып, қарсы жақ үнемі жауапсыз қалдырса, оның таңдауы мен шекарасын құрметтеген дұрыс.
-`;
-}
-
-
-/* 75. Ашу */
-if(
-    q.includes("ашуланып") ||
-    q.includes("ашуландым") ||
-    q.includes("ашулы")
-){
-    return `
-Егер қазір ашулы болсаң, эмоциямен хабарлама жібермей, біраз күткен дұрыс.
-
-Кейін өз ойыңды сабырлы түрде жеткіз.
-
-Мысалы:
-
-«Бұл жағдай маған ұнамады, себебі ...»
-
-«Мен бұл кезде өзімді ... сезіндім.»
-
-Сезіміңді түсіндіру — кінәлаудан гөрі тиімдірек.
-`;
-}
-
-
-/* 76. Ренжідім */
-if(
-    q.includes("ренжідім") ||
-    q.includes("ренжіп қалдым")
-){
-    return `
-Ренжігеніңді айтуға болады, бірақ айыптау емес, өз сезіміңді түсіндіруге тырыс.
-
-Мысалы:
-
-«Шынымды айтсам, бұл жағдай маған ауыр тиді.»
-
-«Мен сенің сөзіңді басқаша қабылдап қалдым.»
-
-«Мүмкін мен дұрыс түсінбеген шығармын, бірақ бұл маған ұнамады.»
-
-Осындай сөздер тыныш сөйлесуге мүмкіндік береді.
-`;
-}
-
-
-/* 77. Сенім */
-if(
-    q.includes("сенуге бола ма") ||
-    q.includes("сенім") ||
-    q.includes("сенбеймін")
-){
-    return `
-Сенім бір күнде пайда болмайды.
-
-Ол уақыт өте келе:
-• сөз бен әрекеттің сәйкес келуі;
-• ашық сөйлесу;
-• уәдені орындау;
-• бір-бірінің шекарасын құрметтеу
-арқылы қалыптасады.
-
-Егер сенім мәселесі болса, ашық сөйлескен дұрыс.
-`;
-}
-
-
-/* 78. Болашақ */
-if(
-    q.includes("болашақ") ||
-    q.includes("келешек")
-){
-    return `
-Болашақ туралы сөйлесу үшін:
-
-«5 жылдан кейін өзіңді қай жерде елестетесің?»
-
-«Болашақта қандай нәрсеге қол жеткізгің келеді?»
-
-«Арманыңдағы өмір қандай?»
-
-Бұл сұрақтар адамның мақсаты мен қызығушылығын жақсырақ түсінуге көмектеседі.
-`;
-}
-
-
-/* 79. Балалық шақ */
-if(
-    q.includes("балалық шақ") ||
-    q.includes("бала кез")
-){
-    return `
-Балалық шақ туралы сұрақтар әңгімені жылы әрі қызықты етуі мүмкін.
-
-«Бала кезіңдегі ең қызық естелігің қандай?»
-
-«Кішкентай кезіңде кім болғың келді?»
-
-«Балалық шағыңдағы ең күлкілі оқиға қандай?»
-
-Өзіңнің де бір естелігіңді айтып берсең, әңгіме екі жақты болады.
-`;
-}
-
-
-/* 80. Отбасы */
-if(
-    q.includes("отбасың") ||
-    q.includes("жанұяң")
-){
-    return `
-Отбасы туралы сұрақтарды абайлап, адамның жеке шекарасын ескеріп қойған дұрыс.
-
-Мысалы:
-
-«Отбасыңмен көп уақыт өткізесің бе?»
-
-«Үйде бауырларың бар ма?»
-
-«Отбасыңмен бірге не істегенді ұнатасың?»
-
-Егер ол бұл тақырыпта сөйлескісі келмесе, басқа тақырыпқа ауысқан дұрыс.
-`;
-}
-
-
-/* 81. Достар */
-if(
-    q.includes("достарың") ||
-    q.includes("досың")
-){
-    return `
-Достары туралы сұрауға болады:
-
-«Достарыңмен бірге не істегенді ұнатасың?»
-
-«Сен үшін жақсы достың қандай қасиеті болуы керек?»
-
-«Достарыңмен жиі кездесесің бе?»
-
-Бұл сұрақтар оның адамдармен қарым-қатынасын түсінуге көмектеседі.
-`;
-}
-
-
-/* 82. Тамақ */
-if(
-    q.includes("сүйікті тағам") ||
-    q.includes("қандай тамақ") ||
-    q.includes("не жегенді")
-){
-    return `
-Тамақ туралы әңгіме жеңіл әрі қызықты.
-
-«Сенің сүйікті тағамың қандай?»
-
-«Егер өмір бойы бір ғана тағам жеу керек болса, нені таңдар едің? 😄»
-
-«Қай жерде тамақтанғанды ұнатасың?»
-
-«Өзің тамақ пісіре аласың ба?»
-`;
-}
-
-
-/* 83. Таңдау */
-if(
-    q.includes("таңдау") ||
-    q.includes("қайсысын таңдар едің")
-){
-    return `
-«Егер таңдау керек болса...» форматындағы сұрақтар әңгімені қызықты етеді.
-
-Мысалы:
-
-🌊 Теңіз бе, тау ма?
-
-🌙 Түн бе, таң ба?
-
-🎬 Кино ма, сериал ма?
-
-✈️ Саяхат па, үйде демалу ма?
-
-☕ Кофе ме, шай ма?
-
-Соңынан:
-«Ал неге дәл соны таңдайсың?»
-деп сұрасаң, әңгімені тереңдетуге болады.
-`;
-}
-
-
-/* 84. Мінез */
-if(
-    q.includes("мінезің") ||
-    q.includes("мінезі қандай")
-){
-    return `
-Адамның мінезін түсіну үшін ашық сұрақтар қой:
-
-«Өзіңді үш сөзбен сипаттасаң, қандай сөздер болар еді?»
-
-«Сен үшін адамдарда ең маңызды қасиет қандай?»
-
-«Өзіңде өзгерткің келетін қасиет бар ма?»
-
-Сұрақты сұрақ үшін емес, шын қызығушылықпен қойған дұрыс.
-`;
-}
-
-
-/* 85. Қызық факт */
-if(
-    q.includes("қызық факт") ||
-    q.includes("өзің туралы факт")
-){
-    return `
-Әңгіме үшін қызық формат:
-
-«Өзің туралы көп адам білмейтін бір қызық факт айтшы 😄»
-
-Сен де өзің туралы бір факт айтып:
-
-«Мен туралы көп адам білмейтін нәрсе — ...»
-
-деп жалғастыра аласың.
-`;
-}
-
-
-/* 86. Қолдау */
-if(
-    q.includes("қолдау керек") ||
-    q.includes("көңілін көтер") ||
-    q.includes("көңілін көтеру")
-){
-    return `
-Егер оның көңіл-күйі нашар болса, бірден кеңес беруге асықпа.
-
-Алдымен:
-
-«Не болды? Егер қаласаң, айтып берсең болады.»
-
-«Сені тыңдауға дайынмын.»
-
-«Қиын болып тұрған сияқты. Қаласаң, сөйлесіп көрейік.»
-
-Кейде адамға шешім емес, жай ғана тыңдайтын адам керек болады.
-`;
-}
-
-
-/* 87. Жаман көңіл-күй */
-if(
-    q.includes("көңіл күйі жоқ") ||
-    q.includes("көңіл-күйі жоқ") ||
-    q.includes("көңілсіз")
-){
-    return `
-Егер оның көңіл-күйі жоқ болса:
-
-«Бәрі жақсы болады. Қаласаң, мен сені тыңдай аламын.»
-
-«Бүгін қиын күн болған сияқты. Өзіңді күтуді ұмытпа 🤍»
-
-«Сөйлескің келсе, мен осындамын.»
-
-Оны мәжбүрлемей, қолдау көрсеткен дұрыс.
-`;
-}
-
-
-/* 88. Сәттілік */
-if(
-    q.includes("сәттілік тіле") ||
-    q.includes("сәттілік")
-){
-    return `
-Мынадай жазуға болады:
-
-«Саған сәттілік тілеймін! Бәрі жақсы болады 😊»
-
-«Қолыңнан келеді! Саған сенемін.»
-
-«Бүгінгі ісің сәтті өтсін!»
-
-Қысқа, бірақ шынайы қолдау кейде көп нәрсені білдіреді.
-`;
-}
-
-
-/* 89. Емтихан */
-if(
-    q.includes("емтихан") ||
-    q.includes("экзамен")
-){
-    return `
-Егер оның емтиханы болса:
-
-«Емтиханың сәтті өтсін! Қолыңнан келеді 😊»
-
-«Уайымдама, дайындалған болсаң бәрі жақсы болады.»
-
-«Сәттілік! Бәрін жақсы тапсырып шығатыныңа сенемін.»
-
-Кейін:
-«Қалай өтті?»
-деп сұрап, оған қызығушылық танытуға болады.
-`;
-}
-
-
-/* 90. Туған күн */
-if(
-    q.includes("туған күн") ||
-    q.includes("туылған күн")
-){
-    return `
-Туған күнмен құттықтаудың бірнеше нұсқасы:
-
-🎉 «Туған күніңмен! Саған зор денсаулық, бақыт және армандарыңның орындалуын тілеймін!»
-
-😊 «Туған күнің құтты болсын! Әр күнің қуанышқа толы болсын!»
-
-🤍 «Туған күніңмен! Әрқашан жүзіңнен күлкі кетпесін!»
-
-Жақын адам болса, өзіңнің жеке тілегіңді қосқан жақсы.
-`;
-}
-
-
-/* 91. Жаңа жыл */
-if(
-    q.includes("жаңа жыл") ||
-    q.includes("жаңа жылмен")
-){
-    return `
-«Жаңа жылыңмен! 🎄 Жаңа жыл саған бақыт, қуаныш және көп жақсы жаңалық әкелсін!»
+«3 таңдау: саяхат, ақша немесе уақыт — қайсысын таңдар едің? 😄»
 
 Немесе:
 
-«Жаңа жыл құтты болсын 😊 Барлық армандарың орындалсын!»
-`;
-}
+«Бір күнге кез келген адамның өмірін көре алсаң, кімді таңдар едің?»`;
+
+    }
 
 
-/* 92. Қайта жазу */
-if(
-    q.includes("қайта жаз") ||
-    q.includes("басқаша жаз")
-){
-    return `
-Әрине. Мәтінді осында жібер.
+    /* 30 */
 
-Мен оны:
-• қысқа;
-• табиғи;
-• жылы;
-• еркін;
-• көңілді;
-• қызықты
-етіп бірнеше нұсқада қайта жазып бере аламын.
-`;
-}
+    if(
+        q.includes("жақсы жауап") ||
+        q.includes("дұрыс жауап")
+    ){
 
+        return `Жақсы жауап деген — міндетті түрде ерекше немесе ақылды жауап емес.
 
-/* 93. Қысқа қыл */
-if(
-    q.includes("қысқартып") ||
-    q.includes("қысқа қыл")
-){
-    return `
-Мәтінді жіберсең, мағынасын жоғалтпай қысқартып беремін.
+Ол:
+• шынайы;
+• контекстке сәйкес;
+• құрметті;
+• әңгімені жалғастыруға мүмкіндік беретін
 
-Мысалы:
+жауап болғаны жақсы.
 
-Ұзақ:
-«Бүгін менің күнім өте жақсы өтті, себебі достарыммен кездестім және бірге жақсы уақыт өткіздік.»
+Нақты хабарламаны жазсаң, соған сәйкес жауап жасап беремін.`;
 
-Қысқа:
-«Бүгін достарыммен жақсы уақыт өткіздім 😊»
-`;
-}
+    }
 
 
-/* 94. Ресми емес */
-if(
-    q.includes("ресми емес") ||
-    q.includes("еркін жаз")
-){
-    return `
-Ресми мәтінді еркін стильге айналдыруға болады.
+    /* DEFAULT SMART RESPONSE */
+
+    return `Түсіндім 😊
+
+Мен саған бұл жағдай бойынша көмектесуге тырысамын.
+
+Егер бұл қызбен сөйлесуге қатысты болса, оның нақты жазған хабарламасын және сен оған дейін не жазғаныңды жібер.
 
 Мысалы:
 
-Ресми:
-«Сізбен сөйлескеніме қуаныштымын.»
+«Мен оған: ... деп жаздым.
 
-Еркін:
-«Сенімен сөйлескен қызық екен 😊»
+Ол маған: ... деп жауап берді.
 
-Нақты мәтінді жіберсең, табиғи чат стиліне келтіріп беремін.
-`;
+Енді не деп жауап берсем болады?»
+
+Сонда мен саған:
+
+💬 табиғи жауап;
+
+😄 еркін жауап;
+
+❤️ жылы жауап;
+
+😂 әзілмен жауап;
+
+📝 бірнеше нұсқа
+
+ұсына аламын.
+
+Жағдайды толық жазсаң, жауап та нақтырақ болады. 🤍`;
+
 }
 
 
-/* 95. Қазақша жауап */
-if(
-    q.includes("қазақша") ||
-    q.includes("қазақ тілінде")
-){
-    return `
-Әрине, қазақша жауап беремін 🇰🇿
+/* FOCUS */
 
-Қандай жағдай болса да, жаза бер.
+window.addEventListener("load",function(){
 
-Мен қазақ тілінде:
-• жауап нұсқаларын;
-• әңгіме бастау идеясын;
-• мәтінді түзетуді;
-• хабарламаны талдауды
-жасай аламын.
-`;
-}
+    input.focus();
 
+});
 
-/* 96. Орысша */
-if(
-    q.includes("орысша") ||
-    q.includes("по русски")
-){
-    return `
-Әрине, орыс тілінде де көмектесе аламын.
+</script>
 
-Мәтінді жіберсең, оны табиғи орысша етіп түзетіп немесе бірнеше жауап нұсқасын ұсынамын.
-`;
-}
-
-
-/* 97. Ағылшынша */
-if(
-    q.includes("ағылшынша") ||
-    q.includes("ағылшын тілінде")
-){
-    return `
-Әрине, ағылшын тілінде де көмектесе аламын.
-
-Мәтінді жіберсең:
-• ағылшынша аударып;
-• табиғи чат стиліне келтіріп;
-• бірнеше жауап нұсқасын жасап бере аламын.
-`;
-}
-
-
-/* 98. Аударма */
-if(
-    q.includes("аударып бер") ||
-    q.includes("аударма")
-){
-    return `
-Әрине 😊
-
-Маған аударғың келген мәтінді жібер және қай тілге аудару керегін жаз.
-
-Мысалы:
-
-«Осыны қазақшаға аудар.»
-
-«Осыны орысшаға аудар.»
-
-«Осыны ағылшынша табиғи етіп аудар.»
-
-Қажет болса, жай аудармай, чатта табиғи естілетіндей етіп те жазып беремін.
-`;
-}
-
-
-/* 99. AI кеңес */
-if(
-    q.includes("кеңес бер") ||
-    q.includes("не істеймін")
-){
-    return `
-Әрине. Жағдайды толық жаз.
-
-Мен саған бір ғана жауап емес, бірнеше бағыт ұсынамын:
-
-1. Қазір не істеген дұрыс.
-2. Не жазуға болады.
-3. Нені жазбаған дұрыс.
-4. Әңгімені қалай жалғастыруға болады.
-5. Қандай жағдайда күткен дұрыс.
-
-Жағдайыңды нақты жазсаң, кеңесім де нақты болады.
-`;
-}
-
-
-/* 100. Жалпы сұрақ */
-if(
-    q.includes("сұрақ қой") ||
-    q.includes("маған сұрақ")
-){
-    return `
-Жақсы 😄
-
-Мына сұраққа жауап беріп көр:
-
-«Егер дәл қазір өміріңдегі бір нәрсені өзгертуге мүмкіндік берілсе, нені өзгертер едің және неге?»
-
-Жауабыңнан кейін тағы бір қызық сұрақ қоя аламын.
-`;
-}
-
-
-/* 101. Әңгіме жалғастыру */
-if(
-    q.includes("тағы не жазам") ||
-    q.includes("ары қарай не")
-){
-    return `
-Әңгіме жалғастырудың қарапайым формуласы:
-
-Оның жауабына реакция білдір →
-Өзіңнен бір нәрсе айт →
-Оған байланысты сұрақ қой.
-
-Мысалы:
-
-Ол: «Мен бүгін киноға бардым.»
-
-Сен: «Ооо, жақсы екен 😄 Мен де кино көргенді ұнатамын. Қандай фильм көрдіңдер?»
-
-Осы әдіс әңгімені табиғи түрде жалғастыруға көмектеседі.
-`;
-}
-
-
-/* 102. Қалай сөйлесу */
-if(
-    q.includes("қалай сөйлесем") ||
-    q.includes("қалай сөйлесу керек")
-){
-    return `
-Жақсы сөйлесудің негізгі қағидалары:
-
-• тыңда;
-• тек өзің туралы айта берме;
-• сұрақ қой;
-• оның жауабына реакция білдір;
-• шынайы бол;
-• асықпа;
-• қысым жасама.
-
-Әңгіме сұхбат емес, екі адамның бір-бірін тануы сияқты болғаны жақсы.
-`;
-}
-
-
-/* 103. Қалай жақсы әсер */
-if(
-    q.includes("жақсы әсер қалдыр") ||
-    q.includes("жақсы әсер")
-){
-    return `
-Жақсы әсер қалдыру үшін арнайы рөл ойнаудың қажеті жоқ.
-
-Шынайы бол, тыңдай біл және адамға құрметпен қара.
-
-Әңгімеде:
-«Сенің ойың қызық екен»
-сияқты нақты реакциялар қолдану адамның өзін тыңдап отырғаныңды көрсетеді.
-`;
-}
-
-
-/* 104. Қыздың жауабы */
-if(
-    q.includes("қыздың жауабы") ||
-    q.includes("оның жауабы")
-){
-    return `
-Егер қыздың нақты жауабын түсінгің келсе, оның хабарламасын осында көшіріп жібер.
-
-Мен оны контекстпен талдап:
-
-• ықтимал мағынасын;
-• эмоциялық реңкін;
-• бірнеше мүмкін түсіндірмесін;
-• оған қалай жауап беруге болатынын
-
-айтып беремін.
-
-Бірақ адамның нақты ойын 100% бір хабарламадан білу мүмкін емес екенін есте ұстаған дұрыс.
-`;
-}
-
-
-/* 105. Жалпы көмек */
-if(
-    q.includes("көмек") ||
-    q.includes("көмектес")
-){
-    return `
-Әрине, көмектесемін 🤍
-
-Маған не болғанын жай ғана өз сөзіңмен жаз.
-
-Мысалы:
-
-«Мен бір қызбен сөйлесіп жүрмін...»
-
-«Ол маған ... деп жазды...»
-
-«Мен оған ... деп жауап бердім...»
-
-«Енді не істейтінімді білмей тұрмын...»
-
-Мен жағдайды бірге талдап шығамын.
-`;
-}
+</body>
+</html>
